@@ -35,7 +35,7 @@
 
 #include "libsph/sph_tiger.h"
 #include "crypto/lyra2.h"
-#include "algo/gost_streebog.h"
+#include "crypto/gost_streebog.h"
 
 #include <crypto/ethash/helpers.hpp>
 
