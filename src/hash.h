@@ -33,7 +33,7 @@
 #include "libsph/sph_sha2.h"
 #include "libsph/sph_haval.h"
 
-#include "algo/sph_tiger.h"
+#include "libsph/sph_tiger.h"
 #include "algo/lyra2.h"
 #include "algo/gost_streebog.h"
 
