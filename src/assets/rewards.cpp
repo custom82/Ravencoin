@@ -8,7 +8,7 @@
 #include <boost/algorithm/string/classification.hpp>
 #include <boost/algorithm/string/split.hpp>
 #include <chainparams.h>
-#include <univalue/include/univalue.h>
+#include <univalue.h>
 #include <core_io.h>
 #include <net.h>
 #include <base58.h>
