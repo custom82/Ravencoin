@@ -34,7 +34,7 @@
 #include "libsph/sph_haval.h"
 
 #include "libsph/sph_tiger.h"
-#include "algo/lyra2.h"
+#include "crypto/lyra2.h"
 #include "algo/gost_streebog.h"
 
 #include <crypto/ethash/helpers.hpp>
