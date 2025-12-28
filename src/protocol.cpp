@@ -93,7 +93,8 @@ CMessageHeader::CMessageHeader(const MessageStartChars& pchMessageStartIn, const
 {
     memcpy(pchMessageStart, pchMessageStartIn, MESSAGE_START_SIZE);
     memset(pchCommand, 0, sizeof(pchCommand));
-    strncpy(pchCommand, pszCommand, COMMAND_SIZE);
+    strncpy(pchCommand, pszCommand, COMMAND_SIZE - 1);
+    pchCommand[COMMAND_SIZE - 1] = 0;
     nMessageSize = nMessageSizeIn;
     memset(pchChecksum, 0, CHECKSUM_SIZE);
 }
@@ -212,4 +213,3 @@ std::string CInvAsset::ToString() const
 {
     return strprintf("%s %s", "CInvAsset for asset: ", name);
 }
-
