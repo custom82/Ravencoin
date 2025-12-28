@@ -20,13 +20,13 @@ extern "C" void* memcpy(void* a, const void* b, size_t c)
 }
 
 extern "C" void __chk_fail(void) __attribute__((__noreturn__));
-extern "C" int __fdelt_warn(int a)
+extern "C" long int __fdelt_warn(long int a)
 {
     if (a >= FD_SETSIZE)
         __chk_fail();
     return a / __NFDBITS;
 }
-extern "C" int __fdelt_chk(int) __attribute__((weak, alias("__fdelt_warn")));
+extern "C" long int __fdelt_chk(long int) __attribute__((weak, alias("__fdelt_warn")));
 
 #if defined(__i386__) || defined(__arm__)
 
