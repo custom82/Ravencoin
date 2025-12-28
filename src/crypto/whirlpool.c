@@ -1,5 +1,6 @@
 #include "miner.h"
 #include "algo-gate-api.h"
+#include "miner-compat.h"
 
 #include <stdlib.h>
 #include <stdint.h>
@@ -32,12 +33,13 @@ void whirlpool_hash(void *state, const void *input)
 
     const int midlen = 64;
     const int tail   = 80 - midlen;
+    const unsigned char *input_bytes = (const unsigned char *)input;
     unsigned char hash[128]; // uint32_t hashA[16], hashB[16];
 #define hashB hash+64
 
     // copy cached midstate
     memcpy( &ctx.whirl1, &whirl1_mid_ctx, sizeof whirl1_mid_ctx );
-    sph_whirlpool1( &ctx.whirl1, input + midlen, tail );
+    sph_whirlpool1( &ctx.whirl1, input_bytes + midlen, tail );
     sph_whirlpool1_close(&ctx.whirl1, hash);
 
     sph_whirlpool1(&ctx.whirl2, hash, 64);
