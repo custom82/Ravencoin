@@ -35,7 +35,7 @@
 
 #include "libsph/sph_tiger.h"
 #include "crypto/lyra2.h"
-#include "crypto/gost_streebog.h"
+#include "libsph/sph_gost.h"
 
 #include <crypto/ethash/helpers.hpp>
 
@@ -610,4 +610,3 @@ uint256 KAWPOWHash_OnlyMix(const CBlockHeader& blockHeader);
 
 
 #endif // RAVEN_HASH_H
-
