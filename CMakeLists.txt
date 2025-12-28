@@ -107,20 +107,16 @@ endif()
 
 # sphlib
 pkg_check_modules(LIBSPH REQUIRED libsph)
-include(CheckSymbolExists)
+include(CheckIncludeFile)
+include(CheckLibraryExists)
 set(CMAKE_REQUIRED_INCLUDES ${LIBSPH_INCLUDE_DIRS})
-set(CMAKE_REQUIRED_LIBRARIES ${LIBSPH_LIBRARIES})
-if (LIBSPH_LIBRARY_DIRS)
-    list(TRANSFORM LIBSPH_LIBRARY_DIRS PREPEND "-L" OUTPUT_VARIABLE LIBSPH_LINK_DIRS)
-    list(APPEND CMAKE_REQUIRED_LIBRARIES ${LIBSPH_LINK_DIRS})
-endif()
-check_symbol_exists(sph_tiger_init "libsph/sph_tiger.h" LIBSPH_HAS_TIGER)
-if (NOT LIBSPH_HAS_TIGER)
+check_include_file("libsph/sph_tiger.h" LIBSPH_HAS_TIGER_HEADER)
+unset(CMAKE_REQUIRED_INCLUDES)
+
+check_library_exists(sph sph_tiger_init "${LIBSPH_LIBRARY_DIRS}" LIBSPH_HAS_TIGER_SYMBOL)
+if (NOT LIBSPH_HAS_TIGER_HEADER OR NOT LIBSPH_HAS_TIGER_SYMBOL)
     message(FATAL_ERROR "libsph was found but does not provide sph_tiger_init; rebuild libsph with Tiger enabled or install a version that exports it.")
 endif()
-unset(CMAKE_REQUIRED_INCLUDES)
-unset(CMAKE_REQUIRED_LIBRARIES)
-unset(LIBSPH_LINK_DIRS)
 
 # libsecp256k1
 pkg_check_modules(SECP256K1 REQUIRED libsecp256k1)
