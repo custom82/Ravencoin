@@ -257,15 +257,15 @@ if (BUILD_RAVENCOIND)
 
     target_link_libraries(ravend
         PRIVATE
-            ${BOOST_LIBRARIES}
+            ${Boost_LIBRARIES}
             ${OPENSSL_LIBRARIES}
             ${leveldb_LIBRARIES}
             ${BDB_LIBRARY}
-            ${libsecp256k1_LDFLAGS}
-            ${libsph_LDFLAGS}
+            ${SECP256K1_LDFLAGS}
+            ${LIBSPH_LDFLAGS}
             ${libevent_LDFLAGS}  # Aggiunto
-            ${univalue_LDFLAGS}
-            ${miniupnpc_LDFLAGS}
+            ${libunivalue_LDFLAGS}
+            ${MINIUPNPC_LDFLAGS}
             ${CMAKE_DL_LIBS}  # Aggiunto
 
     )
@@ -284,16 +284,16 @@ if (BUILD_RAVENCOIN_CLI)
 
     target_link_libraries(raven-cli
         PRIVATE
-            ${BOOST_LIBRARIES}
+            ${Boost_LIBRARIES}
             ${OPENSSL_LIBRARIES}
             ${BDB_LIBRARY}
             ${leveldb_LIBRARIES}
             ${BDB_LIBRARY}
-            ${libsph_LDFLAGS}
-            ${libsecp256k1_LDFLAGS}
+            ${LIBSPH_LDFLAGS}
+            ${SECP256K1_LDFLAGS}
             ${libevent_LDFLAGS}
-            ${univalue_LDFLAGS}
-            ${miniupnpc_LDFLAGS} # Aggiunto
+            ${libunivalue_LDFLAGS}
+            ${MINIUPNPC_LDFLAGS} # Aggiunto
             ${CMAKE_DL_LIBS}  # Aggiunto
 )
 
@@ -311,16 +311,16 @@ if (BUILD_RAVENCOIN_TX)
 
     target_link_libraries(raven-tx
         PRIVATE
-            ${BOOST_LIBRARIES}
+            ${Boost_LIBRARIES}
             ${OPENSSL_LIBRARIES}
             ${BDB_LIBRARY}
             ${leveldb_LIBRARIES}
             ${BDB_LIBRARY}
-            ${libsph_LDFLAGS}
-            ${libsecp256k1_LDFLAGS}
+            ${LIBSPH_LDFLAGS}
+            ${SECP256K1_LDFLAGS}
             ${libevent_LDFLAGS}
-            ${univalue_LDFLAGS}
-            ${miniupnpc_LDFLAGS}# Aggiunto
+            ${libunivalue_LDFLAGS}
+            ${MINIUPNPC_LDFLAGS}# Aggiunto
             ${CMAKE_DL_LIBS}  # Aggiunto
             )
 
@@ -363,16 +363,16 @@ if (BUILD_RAVENCOIN_QT)
 
     target_link_libraries(raven-qt
         PRIVATE
-            ${BOOST_LIBRARIES}
+            ${Boost_LIBRARIES}
             ${OPENSSL_LIBRARIES}
             ${BDB_LIBRARY}
             ${leveldb_LIBRARIES}
             ${BDB_LIBRARY}
-            ${libsph_LDFLAGS}
-            ${seqp256k1_LDFLAGS}
+            ${LIBSPH_LDFLAGS}
+            ${SECP256K1_LDFLAGS}
             ${libevent_LDFLAGS}
-            ${univalue_LDFLAGS}
-            ${miniupnpc_LDFLAGS}# Aggiunto
+            ${libunivalue_LDFLAGS}
+            ${MINIUPNPC_LDFLAGS}# Aggiunto
             ${CMAKE_DL_LIBS}  # Aggiunto
             )
 
