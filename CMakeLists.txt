@@ -117,6 +117,14 @@ set(LIBSPH_LIBRARY_DIR "")
 if (LIBSPH_LIBRARY_DIRS)
     list(GET LIBSPH_LIBRARY_DIRS 0 LIBSPH_LIBRARY_DIR)
 endif()
+find_library(LIBSPH_LIBRARY
+    NAMES sph libsph
+    PATHS ${LIBSPH_LIBRARY_DIRS} /usr/lib64 /usr/lib /usr/local/lib
+)
+if (LIBSPH_LIBRARY)
+    get_filename_component(LIBSPH_LIBRARY_DIR "${LIBSPH_LIBRARY}" DIRECTORY)
+    set(LIBSPH_LIBRARIES "${LIBSPH_LIBRARY}")
+endif()
 set(CMAKE_REQUIRED_LIBRARIES ${LIBSPH_LIBRARIES})
 set(CMAKE_REQUIRED_LINK_OPTIONS ${LIBSPH_LDFLAGS})
 check_library_exists(sph sph_tiger_init "${LIBSPH_LIBRARY_DIR}" LIBSPH_HAS_TIGER_SYMBOL)
@@ -300,8 +308,8 @@ if (BUILD_RAVENCOIND)
             ${CMAKE_DL_LIBS}  # Aggiunto
 
     )
-    if (LIBSPH_LIBRARY_DIRS)
-        target_link_directories(ravend PRIVATE ${LIBSPH_LIBRARY_DIRS})
+    if (LIBSPH_LIBRARY_DIR)
+        target_link_directories(ravend PRIVATE ${LIBSPH_LIBRARY_DIR})
     endif()
 
     if (ENABLE_ZMQ)
@@ -335,8 +343,8 @@ if (BUILD_RAVENCOIN_CLI)
             ${MINIUPNPC_LDFLAGS} # Aggiunto
             ${CMAKE_DL_LIBS}  # Aggiunto
 )
-    if (LIBSPH_LIBRARY_DIRS)
-        target_link_directories(raven-cli PRIVATE ${LIBSPH_LIBRARY_DIRS})
+    if (LIBSPH_LIBRARY_DIR)
+        target_link_directories(raven-cli PRIVATE ${LIBSPH_LIBRARY_DIR})
     endif()
 
     if (ENABLE_ZMQ)
@@ -370,8 +378,8 @@ if (BUILD_RAVENCOIN_TX)
             ${MINIUPNPC_LDFLAGS}# Aggiunto
             ${CMAKE_DL_LIBS}  # Aggiunto
             )
-    if (LIBSPH_LIBRARY_DIRS)
-        target_link_directories(raven-tx PRIVATE ${LIBSPH_LIBRARY_DIRS})
+    if (LIBSPH_LIBRARY_DIR)
+        target_link_directories(raven-tx PRIVATE ${LIBSPH_LIBRARY_DIR})
     endif()
 
     if (ENABLE_ZMQ)
@@ -430,8 +438,8 @@ if (BUILD_RAVENCOIN_QT)
             ${MINIUPNPC_LDFLAGS}# Aggiunto
             ${CMAKE_DL_LIBS}  # Aggiunto
             )
-    if (LIBSPH_LIBRARY_DIRS)
-        target_link_directories(raven-qt PRIVATE ${LIBSPH_LIBRARY_DIRS})
+    if (LIBSPH_LIBRARY_DIR)
+        target_link_directories(raven-qt PRIVATE ${LIBSPH_LIBRARY_DIR})
     endif()
 
     if (ENABLE_ZMQ)
