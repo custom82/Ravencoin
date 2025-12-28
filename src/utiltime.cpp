@@ -11,6 +11,8 @@
 #include "utiltime.h"
 
 #include <atomic>
+#include <chrono>
+#include <thread>
 
 #include <boost/date_time/posix_time/posix_time.hpp>
 #include <boost/thread.hpp>
@@ -71,8 +73,7 @@ void MilliSleep(int64_t n)
 #elif defined(HAVE_WORKING_BOOST_SLEEP)
     boost::this_thread::sleep(boost::posix_time::milliseconds(n));
 #else
-//should never get here
-#error missing boost sleep implementation
+    std::this_thread::sleep_for(std::chrono::milliseconds(n));
 #endif
 }
 
