@@ -82,7 +82,6 @@ Q_IMPORT_PLUGIN(QMacStylePlugin);
 #endif
 
 #if QT_VERSION < 0x050000
-#include <QTextCodec>
 #endif
 
 // Declare meta types used for QMetaObject::invokeMethod
@@ -601,11 +600,6 @@ int main(int argc, char *argv[])
     // Do not refer to data directory yet, this can be overridden by Intro::pickDataDirectory
 
     /// 2. Basic Qt initialization (not dependent on parameters or configuration)
-#if QT_VERSION < 0x050000
-    // Internal string conversion is all UTF-8
-    QTextCodec::setCodecForTr(QTextCodec::codecForName("UTF-8"));
-    QTextCodec::setCodecForCStrings(QTextCodec::codecForTr());
-#endif
 
     Q_INIT_RESOURCE(raven);
     Q_INIT_RESOURCE(raven_locale);
