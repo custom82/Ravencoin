@@ -14,9 +14,9 @@ Install dependencies:
 
 Optional dependencies
 ----------------------
-Qt5 for GUI
+Qt6 for GUI
 
-`# pkg install qt5`
+`# pkg install qt6`
 
 libqrencode for QR Code support.
 
@@ -78,7 +78,6 @@ ravend and raven-cli are in `src/`
 __Optional:__
 
 `make install`  # if you want to install the binaries to /usr/local/bin.
-
 
 
 

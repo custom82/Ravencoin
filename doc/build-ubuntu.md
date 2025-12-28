@@ -16,8 +16,8 @@ libboost-program-options1.74-dev
 libboost-system1.74-dev
 libboost-thread1.74-dev
 libboost-test1.74-dev
-qtbase5-dev
-qttools5-dev
+qt6-base-dev
+qt6-tools-dev
 bison
 libexpat1-dev
 libdbus-1-dev
@@ -57,8 +57,8 @@ libboost-program-options1.71-dev
 libboost-system1.71-dev
 libboost-thread1.71-dev
 libboost-test1.71-dev
-qtbase5-dev
-qttools5-dev
+qt6-base-dev
+qt6-tools-dev
 bison
 libexpat1-dev
 libdbus-1-dev
@@ -98,8 +98,8 @@ libboost-program-options-dev
 libboost-system-dev
 libboost-thread-dev
 libboost-test-dev
-qtbase5-dev
-qttools5-dev
+qt6-base-dev
+qt6-tools-dev
 bison
 libexpat1-dev
 libdbus-1-dev

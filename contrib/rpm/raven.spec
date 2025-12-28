@@ -9,7 +9,7 @@
 %if 0%{?_use_qt4}
 %define buildargs --with-qrencode --with-gui=qt4
 %else
-%define buildargs --with-qrencode --with-gui=qt5
+%define buildargs --with-qrencode --with-gui=qt6
 %endif
 %endif
 
@@ -67,9 +67,9 @@ Provides:	%{name} = %{version}-%{release}
 %if 0%{?_use_qt4}
 BuildRequires:	qt-devel
 %else
-BuildRequires:	qt5-qtbase-devel
-# for /usr/bin/lrelease-qt5
-BuildRequires:	qt5-linguist
+BuildRequires:	qt6-qtbase-devel
+# for /usr/bin/lrelease-qt6
+BuildRequires:	qt6-qttools
 %endif
 BuildRequires:	protobuf-devel
 BuildRequires:	qrencode-devel
