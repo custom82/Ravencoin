@@ -10,6 +10,7 @@
 #include "support/lockedpool.h"
 #include "support/cleanse.h"
 
+#include <memory>
 #include <string>
 #include <vector>
 
@@ -21,13 +22,13 @@ template <typename T>
 struct secure_allocator : public std::allocator<T> {
     // MSVC8 default copy constructor is broken
     typedef std::allocator<T> base;
-    typedef typename base::size_type size_type;
-    typedef typename base::difference_type difference_type;
-    typedef typename base::pointer pointer;
-    typedef typename base::const_pointer const_pointer;
-    typedef typename base::reference reference;
-    typedef typename base::const_reference const_reference;
-    typedef typename base::value_type value_type;
+    typedef typename std::allocator_traits<base>::size_type size_type;
+    typedef typename std::allocator_traits<base>::difference_type difference_type;
+    typedef typename std::allocator_traits<base>::pointer pointer;
+    typedef typename std::allocator_traits<base>::const_pointer const_pointer;
+    typedef T value_type;
+    typedef value_type& reference;
+    typedef const value_type& const_reference;
     secure_allocator() noexcept {}
     secure_allocator(const secure_allocator& a) noexcept : base(a) {}
     template <typename U>
@@ -40,12 +41,12 @@ struct secure_allocator : public std::allocator<T> {
         typedef secure_allocator<_Other> other;
     };
 
-    T* allocate(std::size_t n, const void* hint = 0)
+    pointer allocate(size_type n, const void* hint = 0)
     {
-        return static_cast<T*>(LockedPoolManager::Instance().alloc(sizeof(T) * n));
+        return static_cast<pointer>(LockedPoolManager::Instance().alloc(sizeof(T) * n));
     }
 
-    void deallocate(T* p, std::size_t n)
+    void deallocate(pointer p, size_type n)
     {
         if (p != nullptr) {
             memory_cleanse(p, sizeof(T) * n);
