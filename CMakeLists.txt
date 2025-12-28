@@ -198,6 +198,14 @@ set(RAVEN_CORE_SOURCES
 # ======================================
 add_library(raven_core OBJECT ${RAVEN_CORE_SOURCES})
 
+set_source_files_properties(
+    src/crypto/sha2.c
+    src/crypto/whirlpool.c
+    src/crypto/whirlpoolx.c
+    PROPERTIES
+        LANGUAGE CXX
+)
+
 if (ENABLE_ZMQ)
     target_include_directories(raven_core PUBLIC ${LIBZMQ_INCLUDE_DIRS})
     target_link_libraries(raven_core PUBLIC ${LIBZMQ_LIBRARIES})
