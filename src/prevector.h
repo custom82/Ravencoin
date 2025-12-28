@@ -256,7 +256,7 @@ public:
         }
     }
 
-    prevector(prevector<N, T, Size, Diff>&& other) : _size(0) {
+    prevector(prevector<N, T, Size, Diff>&& other) : _size(0), _union{{}} {
         swap(other);
     }
 
