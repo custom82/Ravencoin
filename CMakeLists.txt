@@ -149,7 +149,7 @@ include_directories(
     ${CMAKE_CURRENT_SOURCE_DIR}/src/wallet
     ${CMAKE_CURRENT_SOURCE_DIR}/src/zmq
     ${BDB_INCLUDE_DIR}
-    ${LIBSPH_INCLUDE_DIR}
+    ${LIBSPH_INCLUDE_DIRS}
     ${SECP256K1_INCLUDE_DIR}
     ${leveldb_INCLUDE_DIR}  # Aggiunto qui
     ${CMAKE_DL_INCLUDE_LIBS}
@@ -281,6 +281,9 @@ if (BUILD_RAVENCOIND)
             ${CMAKE_DL_LIBS}  # Aggiunto
 
     )
+    if (LIBSPH_LIBRARY_DIRS)
+        target_link_directories(ravend PRIVATE ${LIBSPH_LIBRARY_DIRS})
+    endif()
 
     if (ENABLE_ZMQ)
         target_link_libraries(ravend PRIVATE ${LIBZMQ_LIBRARIES})
@@ -313,6 +316,9 @@ if (BUILD_RAVENCOIN_CLI)
             ${MINIUPNPC_LDFLAGS} # Aggiunto
             ${CMAKE_DL_LIBS}  # Aggiunto
 )
+    if (LIBSPH_LIBRARY_DIRS)
+        target_link_directories(raven-cli PRIVATE ${LIBSPH_LIBRARY_DIRS})
+    endif()
 
     if (ENABLE_ZMQ)
         target_link_libraries(raven-cli PRIVATE ${LIBZMQ_LIBRARIES})
@@ -345,6 +351,9 @@ if (BUILD_RAVENCOIN_TX)
             ${MINIUPNPC_LDFLAGS}# Aggiunto
             ${CMAKE_DL_LIBS}  # Aggiunto
             )
+    if (LIBSPH_LIBRARY_DIRS)
+        target_link_directories(raven-tx PRIVATE ${LIBSPH_LIBRARY_DIRS})
+    endif()
 
     if (ENABLE_ZMQ)
         target_link_libraries(raven-tx PRIVATE ${LIBZMQ_LIBRARIES})
@@ -402,6 +411,9 @@ if (BUILD_RAVENCOIN_QT)
             ${MINIUPNPC_LDFLAGS}# Aggiunto
             ${CMAKE_DL_LIBS}  # Aggiunto
             )
+    if (LIBSPH_LIBRARY_DIRS)
+        target_link_directories(raven-qt PRIVATE ${LIBSPH_LIBRARY_DIRS})
+    endif()
 
     if (ENABLE_ZMQ)
         target_link_libraries(raven-qt PRIVATE ${LIBZMQ_LIBRARIES})
