@@ -14,10 +14,12 @@
 #include <leveldb/filter_policy.h>
 #if __has_include(<leveldb/helpers/memenv.h>)
 #include <leveldb/helpers/memenv.h>
+#define HAVE_LEVELDB_MEMENV 1
 #elif __has_include(<memenv.h>)
 #include <memenv.h>
+#define HAVE_LEVELDB_MEMENV 1
 #else
-#error "LevelDB memenv header not found"
+#define HAVE_LEVELDB_MEMENV 0
 #endif
 #include <stdint.h>
 #include <algorithm>
@@ -133,8 +135,12 @@ CDBWrapper::CDBWrapper(const fs::path& path, size_t nCacheSize, bool fMemory, bo
     options = GetOptions(nCacheSize, maxFileSize);
     options.create_if_missing = true;
     if (fMemory) {
+#if HAVE_LEVELDB_MEMENV
         penv = leveldb::NewMemEnv(leveldb::Env::Default());
         options.env = penv;
+#else
+        throw dbwrapper_error("LevelDB memenv support is not available with the system LevelDB");
+#endif
     } else {
         if (fWipe) {
             LogPrintf("Wiping LevelDB in %s\n", path.string());
