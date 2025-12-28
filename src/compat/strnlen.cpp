@@ -10,7 +10,7 @@
 #include <cstring>
 
 #if HAVE_DECL_STRNLEN == 0
-size_t strnlen( const char *start, size_t max_len)
+extern "C" size_t strnlen(const char* start, size_t max_len) noexcept
 {
     const char *end = (const char *)memchr(start, '\0', max_len);
 

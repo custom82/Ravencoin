@@ -90,7 +90,7 @@ typedef unsigned int SOCKET;
 #endif
 
 #if HAVE_DECL_STRNLEN == 0
-size_t strnlen( const char *start, size_t max_len);
+extern "C" size_t strnlen(const char* start, size_t max_len) noexcept;
 #endif // HAVE_DECL_STRNLEN
 
 bool static inline IsSelectableSocket(const SOCKET& s) {
