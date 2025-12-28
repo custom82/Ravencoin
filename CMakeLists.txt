@@ -165,7 +165,18 @@ file(GLOB CORE_TOP_SRC
     src/*.cpp
     src/primitives/*.cpp
     src/assets/*.cpp
+    src/compat/*.cpp
+    src/consensus/*.cpp
+    src/policy/*.cpp
+    src/script/*.cpp
+    src/support/*.cpp
 )
+
+if (ENABLE_WALLET)
+    file(GLOB CORE_WALLET_SRC
+        src/wallet/*.cpp
+    )
+endif()
 
 # Escludi i file di test dalla compilazione
 file(GLOB CORE_CRYPTO_SRC
@@ -181,6 +192,13 @@ list(REMOVE_ITEM CORE_CRYPTO_SRC
     "${CMAKE_CURRENT_SOURCE_DIR}/src/crypto/md_helper.c"
     "${CMAKE_CURRENT_SOURCE_DIR}/src/crypto/ctaes/bench.c"
     "${CMAKE_CURRENT_SOURCE_DIR}/src/crypto/ctaes/test.c"
+    "${CMAKE_CURRENT_SOURCE_DIR}/src/crypto/ctaes/ctaes.c"
+)
+
+list(REMOVE_ITEM CORE_TOP_SRC
+    "${CMAKE_CURRENT_SOURCE_DIR}/src/ravend.cpp"
+    "${CMAKE_CURRENT_SOURCE_DIR}/src/raven-cli.cpp"
+    "${CMAKE_CURRENT_SOURCE_DIR}/src/raven-tx.cpp"
 )
 
 
@@ -273,7 +291,7 @@ if (BUILD_RAVENCOIN_CLI)
             ${BDB_LIBRARY}
             ${libsph_LDFLAGS}
             ${libsecp256k1_LDFLAGS}
-            ${LIBEVENT_LDFLAGS}
+            ${libevent_LDFLAGS}
             ${univalue_LDFLAGS}
             ${miniupnpc_LDFLAGS} # Aggiunto
             ${CMAKE_DL_LIBS}  # Aggiunto
@@ -299,7 +317,7 @@ if (BUILD_RAVENCOIN_TX)
             ${leveldb_LIBRARIES}
             ${BDB_LIBRARY}
             ${libsph_LDFLAGS}
-            ${libseqp256k1_LDFLAGS}
+            ${libsecp256k1_LDFLAGS}
             ${libevent_LDFLAGS}
             ${univalue_LDFLAGS}
             ${miniupnpc_LDFLAGS}# Aggiunto
