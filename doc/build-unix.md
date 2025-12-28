@@ -87,9 +87,9 @@ ZMQ dependencies (provides ZMQ API):
 
     sudo dnf install zeromq-devel
 
-To build with Qt 5 you need the following:
+To build with Qt 6 you need the following:
 
-    sudo dnf install qt5-qttools-devel qt5-qtbase-devel protobuf-devel
+    sudo dnf install qt6-qttools-devel qt6-qtbase-devel protobuf-devel
 
 libqrencode (optional) can be installed with:
 
