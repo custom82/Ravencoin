@@ -55,15 +55,26 @@ add_definitions(
 # ======================================
 find_package(Threads REQUIRED)
 find_package(OpenSSL REQUIRED)
-# LevelDB - Includi direttamente il file di configurazione con il nome corretto
-set(leveldb_DIR /usr/lib64/cmake/leveldb)
-find_package(leveldb REQUIRED)
 
-# Verifica se LevelDB è stato trovato
-if (NOT leveldb_FOUND)
-    message(FATAL_ERROR "LevelDB non trovato! Assicurati che leveldbConfig.cmake sia nel percorso giusto.")
+# pkg-config per varie librerie
+find_package(PkgConfig REQUIRED)
+
+# LevelDB - preferisci config CMake, fallback a pkg-config
+find_package(leveldb CONFIG QUIET)
+
+if (leveldb_FOUND)
+    message(STATUS "LevelDB trovato con successo via CMake config.")
+    if (TARGET leveldb::leveldb)
+        set(leveldb_LIBRARIES leveldb::leveldb)
+    endif()
+    if (NOT leveldb_INCLUDE_DIR AND DEFINED leveldb_INCLUDE_DIRS)
+        set(leveldb_INCLUDE_DIR ${leveldb_INCLUDE_DIRS})
+    endif()
 else()
-    message(STATUS "LevelDB trovato con successo.")
+    pkg_check_modules(LEVELDB REQUIRED leveldb)
+    set(leveldb_INCLUDE_DIR ${LEVELDB_INCLUDE_DIRS})
+    set(leveldb_LIBRARIES ${LEVELDB_LIBRARIES})
+    message(STATUS "LevelDB trovato via pkg-config.")
 endif()
 
 # Boost - Usare la nuova sintassi
@@ -73,9 +84,6 @@ find_package(Boost 1.74 REQUIRED
 )
 
 
-
-# pkg-config per varie librerie
-find_package(PkgConfig REQUIRED)
 
 pkg_check_modules(libevent REQUIRED libevent)
 pkg_check_modules(libunivalue REQUIRED libunivalue)
