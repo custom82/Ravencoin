@@ -175,8 +175,12 @@ file(GLOB CORE_CRYPTO_SRC
     src/crypto/ethash/lib/ethash/*.cpp
     src/crypto/ethash/lib/ethash/*.c
     src/crypto/ethash/lib/keccak/*.c
-    EXCLUDE src/crypto/ctaes/bench.c
-    EXCLUDE src/crypto/ctaes/test.c
+)
+
+list(REMOVE_ITEM CORE_CRYPTO_SRC
+    "${CMAKE_CURRENT_SOURCE_DIR}/src/crypto/md_helper.c"
+    "${CMAKE_CURRENT_SOURCE_DIR}/src/crypto/ctaes/bench.c"
+    "${CMAKE_CURRENT_SOURCE_DIR}/src/crypto/ctaes/test.c"
 )
 
 
