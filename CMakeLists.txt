@@ -273,7 +273,7 @@ if (BUILD_RAVENCOIND)
             ${leveldb_LIBRARIES}
             ${BDB_LIBRARY}
             ${SECP256K1_LDFLAGS}
-            ${LIBSPH_LDFLAGS}
+            ${LIBSPH_LIBRARIES}
             ${libevent_LDFLAGS}  # Aggiunto
             ${libevent_pthreads_LDFLAGS}
             ${libunivalue_LDFLAGS}
@@ -281,6 +281,10 @@ if (BUILD_RAVENCOIND)
             ${CMAKE_DL_LIBS}  # Aggiunto
 
     )
+
+    if (ENABLE_ZMQ)
+        target_link_libraries(ravend PRIVATE ${LIBZMQ_LIBRARIES})
+    endif()
 
 #    install(TARGETS ravend RUNTIME DESTINATION bin)
 endif()
@@ -301,7 +305,7 @@ if (BUILD_RAVENCOIN_CLI)
             ${BDB_LIBRARY}
             ${leveldb_LIBRARIES}
             ${BDB_LIBRARY}
-            ${LIBSPH_LDFLAGS}
+            ${LIBSPH_LIBRARIES}
             ${SECP256K1_LDFLAGS}
             ${libevent_LDFLAGS}
             ${libevent_pthreads_LDFLAGS}
@@ -309,6 +313,10 @@ if (BUILD_RAVENCOIN_CLI)
             ${MINIUPNPC_LDFLAGS} # Aggiunto
             ${CMAKE_DL_LIBS}  # Aggiunto
 )
+
+    if (ENABLE_ZMQ)
+        target_link_libraries(raven-cli PRIVATE ${LIBZMQ_LIBRARIES})
+    endif()
 
     install(TARGETS raven-cli RUNTIME DESTINATION bin)
 endif()
@@ -329,7 +337,7 @@ if (BUILD_RAVENCOIN_TX)
             ${BDB_LIBRARY}
             ${leveldb_LIBRARIES}
             ${BDB_LIBRARY}
-            ${LIBSPH_LDFLAGS}
+            ${LIBSPH_LIBRARIES}
             ${SECP256K1_LDFLAGS}
             ${libevent_LDFLAGS}
             ${libevent_pthreads_LDFLAGS}
@@ -337,6 +345,10 @@ if (BUILD_RAVENCOIN_TX)
             ${MINIUPNPC_LDFLAGS}# Aggiunto
             ${CMAKE_DL_LIBS}  # Aggiunto
             )
+
+    if (ENABLE_ZMQ)
+        target_link_libraries(raven-tx PRIVATE ${LIBZMQ_LIBRARIES})
+    endif()
 
 #    install(TARGETS raven-tx RUNTIME DESTINATION bin)
 endif()
@@ -382,7 +394,7 @@ if (BUILD_RAVENCOIN_QT)
             ${BDB_LIBRARY}
             ${leveldb_LIBRARIES}
             ${BDB_LIBRARY}
-            ${LIBSPH_LDFLAGS}
+            ${LIBSPH_LIBRARIES}
             ${SECP256K1_LDFLAGS}
             ${libevent_LDFLAGS}
             ${libevent_pthreads_LDFLAGS}
@@ -390,6 +402,10 @@ if (BUILD_RAVENCOIN_QT)
             ${MINIUPNPC_LDFLAGS}# Aggiunto
             ${CMAKE_DL_LIBS}  # Aggiunto
             )
+
+    if (ENABLE_ZMQ)
+        target_link_libraries(raven-qt PRIVATE ${LIBZMQ_LIBRARIES})
+    endif()
 
     target_include_directories(raven-qt PRIVATE
         ${CMAKE_CURRENT_SOURCE_DIR}/src/qt
