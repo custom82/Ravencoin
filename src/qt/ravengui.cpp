@@ -59,6 +59,7 @@
 #include <QMessageBox>
 #include <QMimeData>
 #include <QProgressDialog>
+#include <QRegularExpression>
 #include <QScreen>
 #include <QSettings>
 #include <QShortcut>
@@ -770,11 +771,12 @@ void RavenGUI::createToolBars()
                     QString answer = reply->readAll();
 
                     // Create regex expression to find the value with 8 decimals
-                    QRegExp rx("\\d*.\\d\\d\\d\\d\\d\\d\\d\\d");
-                    rx.indexIn(answer);
-
-                    // List the found values
-                    QStringList list = rx.capturedTexts();
+                    QRegularExpression rx("\\d*.\\d\\d\\d\\d\\d\\d\\d\\d");
+                    QRegularExpressionMatch match = rx.match(answer);
+                    QStringList list;
+                    if (match.hasMatch()) {
+                        list << match.captured(0);
+                    }
 
                     QString currentPriceStyleSheet = ".QLabel{color: %1;}";
                     // Evaluate the current and next numbers and assign a color (green for positive, red for negative)
@@ -846,11 +848,12 @@ void RavenGUI::createToolBars()
                        if (key == "tag_name") {
                            auto latestVersion = latestRelease["tag_name"].get_str();
 
-                           QRegExp rx("v(\\d+).(\\d+).(\\d+)");
-                           rx.indexIn(QString::fromStdString(latestVersion));
-
-                           // List the found values
-                           QStringList list = rx.capturedTexts();
+                           QRegularExpression rx("v(\\d+).(\\d+).(\\d+)");
+                           QRegularExpressionMatch match = rx.match(QString::fromStdString(latestVersion));
+                           QStringList list;
+                           if (match.hasMatch()) {
+                               list << match.captured(0) << match.captured(1) << match.captured(2) << match.captured(3);
+                           }
                            static const int CLIENT_VERSION_MAJOR_INDEX = 1;
                            static const int CLIENT_VERSION_MINOR_INDEX = 2;
                            static const int CLIENT_VERSION_REVISION_INDEX = 3;
