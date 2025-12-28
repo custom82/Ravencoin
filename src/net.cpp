@@ -54,7 +54,7 @@
 #endif
 
 // MSG_DONTWAIT is not available on some platforms, if it doesn't exist define it as 0
-#if !defined(HAVE_MSG_DONTWAIT)
+#if !defined(HAVE_MSG_DONTWAIT) && !defined(MSG_DONTWAIT)
 #define MSG_DONTWAIT 0
 #endif
 
