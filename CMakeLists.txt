@@ -86,6 +86,7 @@ find_package(Boost 1.74 REQUIRED
 
 
 pkg_check_modules(libevent REQUIRED libevent)
+pkg_check_modules(libevent_pthreads REQUIRED libevent_pthreads)
 pkg_check_modules(libunivalue REQUIRED libunivalue)
 
 
@@ -144,7 +145,9 @@ include_directories(
     ${CMAKE_CURRENT_SOURCE_DIR}/src/support
     ${CMAKE_CURRENT_SOURCE_DIR}/src/util
     ${CMAKE_CURRENT_SOURCE_DIR}/src/assets
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/rpc
     ${CMAKE_CURRENT_SOURCE_DIR}/src/wallet
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/zmq
     ${BDB_INCLUDE_DIR}
     ${LIBSPH_INCLUDE_DIR}
     ${SECP256K1_INCLUDE_DIR}
@@ -170,11 +173,18 @@ file(GLOB CORE_TOP_SRC
     src/policy/*.cpp
     src/script/*.cpp
     src/support/*.cpp
+    src/rpc/*.cpp
 )
 
 if (ENABLE_WALLET)
     file(GLOB CORE_WALLET_SRC
         src/wallet/*.cpp
+    )
+endif()
+
+if (ENABLE_ZMQ)
+    file(GLOB CORE_ZMQ_SRC
+        src/zmq/*.cpp
     )
 endif()
 
@@ -205,6 +215,7 @@ list(REMOVE_ITEM CORE_TOP_SRC
 set(RAVEN_CORE_SOURCES
     ${CORE_TOP_SRC}
     ${CORE_CRYPTO_SRC}
+    ${CORE_ZMQ_SRC}
     ${CORE_WALLET_SRC}
 )
 
@@ -264,6 +275,7 @@ if (BUILD_RAVENCOIND)
             ${SECP256K1_LDFLAGS}
             ${LIBSPH_LDFLAGS}
             ${libevent_LDFLAGS}  # Aggiunto
+            ${libevent_pthreads_LDFLAGS}
             ${libunivalue_LDFLAGS}
             ${MINIUPNPC_LDFLAGS}
             ${CMAKE_DL_LIBS}  # Aggiunto
@@ -292,6 +304,7 @@ if (BUILD_RAVENCOIN_CLI)
             ${LIBSPH_LDFLAGS}
             ${SECP256K1_LDFLAGS}
             ${libevent_LDFLAGS}
+            ${libevent_pthreads_LDFLAGS}
             ${libunivalue_LDFLAGS}
             ${MINIUPNPC_LDFLAGS} # Aggiunto
             ${CMAKE_DL_LIBS}  # Aggiunto
@@ -319,6 +332,7 @@ if (BUILD_RAVENCOIN_TX)
             ${LIBSPH_LDFLAGS}
             ${SECP256K1_LDFLAGS}
             ${libevent_LDFLAGS}
+            ${libevent_pthreads_LDFLAGS}
             ${libunivalue_LDFLAGS}
             ${MINIUPNPC_LDFLAGS}# Aggiunto
             ${CMAKE_DL_LIBS}  # Aggiunto
@@ -371,6 +385,7 @@ if (BUILD_RAVENCOIN_QT)
             ${LIBSPH_LDFLAGS}
             ${SECP256K1_LDFLAGS}
             ${libevent_LDFLAGS}
+            ${libevent_pthreads_LDFLAGS}
             ${libunivalue_LDFLAGS}
             ${MINIUPNPC_LDFLAGS}# Aggiunto
             ${CMAKE_DL_LIBS}  # Aggiunto
