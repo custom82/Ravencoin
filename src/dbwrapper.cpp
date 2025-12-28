@@ -12,7 +12,13 @@
 #include <leveldb/cache.h>
 #include <leveldb/env.h>
 #include <leveldb/filter_policy.h>
+#if __has_include(<leveldb/helpers/memenv.h>)
+#include <leveldb/helpers/memenv.h>
+#elif __has_include(<memenv.h>)
 #include <memenv.h>
+#else
+#error "LevelDB memenv header not found"
+#endif
 #include <stdint.h>
 #include <algorithm>
 
