@@ -28,6 +28,7 @@
 #include "warnings.h"
 
 #include <memory>
+#include <limits>
 #include <stdint.h>
 
 #include <univalue.h>
@@ -777,7 +778,10 @@ static UniValue getkawpowhash(const JSONRPCRequest& request) {
     std::string str_header_hash = request.params[0].get_str();
     std::string mix_hash = request.params[1].get_str();
     std::string hex_nonce = request.params[2].get_str();
-    uint32_t nHeight = request.params[3].get_uint();
+    int64_t height_param = request.params[3].get_int64();
+    if (height_param < 0 || height_param > std::numeric_limits<uint32_t>::max())
+        throw JSONRPCError(RPC_INVALID_PARAMS, "Invalid height");
+    uint32_t nHeight = static_cast<uint32_t>(height_param);
 
     uint64_t nNonce;
     if (!ParseUInt64(hex_nonce, &nNonce, 16))
