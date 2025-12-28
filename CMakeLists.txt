@@ -332,6 +332,9 @@ if (BUILD_RAVENCOIN_QT)
         src/qt/raven.qrc
     )
 
+    # Avoid AutoUic interpreting core headers like ui_interface.h as generated UI headers.
+    set_source_files_properties(${RAVEN_QT_SRC} PROPERTIES SKIP_AUTOUIC ON)
+
     add_executable(raven-qt
         src/qt/raven.cpp
         ${RAVEN_QT_SRC}
