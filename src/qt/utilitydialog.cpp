@@ -26,7 +26,7 @@
 
 #include <QCloseEvent>
 #include <QLabel>
-#include <QRegExp>
+#include <QRegularExpression>
 #include <QTextTable>
 #include <QTextCursor>
 #include <QVBoxLayout>
@@ -56,8 +56,7 @@ HelpMessageDialog::HelpMessageDialog(QWidget *parent, bool about) :
         QString licenseInfo = QString::fromStdString(LicenseInfo());
         QString licenseInfoHTML = licenseInfo;
         // Make URLs clickable
-        QRegExp uri("<(.*)>", Qt::CaseSensitive, QRegExp::RegExp2);
-        uri.setMinimal(true); // use non-greedy matching
+        QRegularExpression uri("<(.*?)>");
         licenseInfoHTML.replace(uri, "<a href=\"\\1\">\\1</a>");
         // Replace newlines with HTML breaks
         licenseInfoHTML.replace("\n", "<br>");
@@ -196,5 +195,4 @@ void ShutdownWindow::closeEvent(QCloseEvent *event)
 {
     event->ignore();
 }
-
 
