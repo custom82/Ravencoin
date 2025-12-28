@@ -1,5 +1,6 @@
 #include "miner.h"
 #include "algo-gate-api.h"
+#include "miner-compat.h"
 
 #include <stdlib.h>
 #include <stdint.h>

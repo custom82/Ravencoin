@@ -10,6 +10,7 @@
 
 #include "miner.h"
 #include "algo-gate-api.h"
+#include "miner-compat.h"
 
 #include <string.h>
 #include <inttypes.h>
