@@ -408,7 +408,7 @@ if (BUILD_RAVENCOIN_QT)
     set(CMAKE_AUTOUIC ON)
     set(CMAKE_AUTORCC ON)
 
-    find_package(Qt6 6.2 REQUIRED COMPONENTS Core Widgets Gui Network)
+    find_package(Qt6 6.2 REQUIRED COMPONENTS Core Widgets Gui Network LinguistTools)
 
     file(GLOB RAVEN_QT_SRC
         src/qt/*.cpp
@@ -438,9 +438,23 @@ if (BUILD_RAVENCOIN_QT)
         src/qt/forms/*.ui
     )
 
+    file(GLOB RAVEN_QT_TS_FILES
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/qt/locale/*.ts
+    )
+    qt6_add_translation(RAVEN_QT_QM_FILES ${RAVEN_QT_TS_FILES})
+    set(RAVEN_QT_LOCALE_QRC ${CMAKE_CURRENT_BINARY_DIR}/raven_locale_generated.qrc)
+    file(WRITE ${RAVEN_QT_LOCALE_QRC} "<RCC>\n    <qresource prefix=\"/translations\">\n")
+    foreach(qm_file ${RAVEN_QT_QM_FILES})
+        get_filename_component(qm_name ${qm_file} NAME)
+        string(REPLACE ".qm" "" qm_base ${qm_name})
+        string(REPLACE "raven_" "" locale_alias ${qm_base})
+        file(APPEND ${RAVEN_QT_LOCALE_QRC} "        <file alias=\"${locale_alias}\">${qm_file}</file>\n")
+    endforeach()
+    file(APPEND ${RAVEN_QT_LOCALE_QRC} "    </qresource>\n</RCC>\n")
+
     set(RAVEN_QT_RESOURCES
         src/qt/raven.qrc
-        src/qt/raven_locale.qrc
+        ${RAVEN_QT_LOCALE_QRC}
     )
 
     find_package(Protobuf REQUIRED)
