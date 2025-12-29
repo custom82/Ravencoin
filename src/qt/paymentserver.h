@@ -37,6 +37,7 @@
 #include "walletmodel.h"
 
 #include <QObject>
+#include <QSslError>
 #include <QString>
 
 class OptionsModel;
@@ -49,7 +50,6 @@ class QByteArray;
 class QLocalServer;
 class QNetworkAccessManager;
 class QNetworkReply;
-class QSslError;
 class QUrl;
 QT_END_NAMESPACE
 
