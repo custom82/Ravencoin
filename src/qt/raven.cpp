@@ -138,11 +138,23 @@ static void initTranslations(QTranslator &qtTranslatorBase, QTranslator &qtTrans
     // - Then load the more specific locale translator
 
     // Load e.g. qt_de.qm
-    if (qtTranslatorBase.load("qt_" + lang, QLibraryInfo::location(QLibraryInfo::TranslationsPath)))
+    if (qtTranslatorBase.load("qt_" + lang,
+#if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
+        QLibraryInfo::path(QLibraryInfo::TranslationsPath)
+#else
+        QLibraryInfo::location(QLibraryInfo::TranslationsPath)
+#endif
+    ))
         QApplication::installTranslator(&qtTranslatorBase);
 
     // Load e.g. qt_de_DE.qm
-    if (qtTranslator.load("qt_" + lang_territory, QLibraryInfo::location(QLibraryInfo::TranslationsPath)))
+    if (qtTranslator.load("qt_" + lang_territory,
+#if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
+        QLibraryInfo::path(QLibraryInfo::TranslationsPath)
+#else
+        QLibraryInfo::location(QLibraryInfo::TranslationsPath)
+#endif
+    ))
         QApplication::installTranslator(&qtTranslator);
 
     // Load e.g. raven_de.qm (shortcut "de" needs to be defined in raven.qrc)
@@ -606,8 +618,10 @@ int main(int argc, char *argv[])
 
 #if QT_VERSION > 0x050600
     // Generate high-dpi pixmaps
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
     QApplication::setAttribute(Qt::AA_UseHighDpiPixmaps);
     QGuiApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
+#endif
 #endif
 #ifdef Q_OS_MAC
     QApplication::setAttribute(Qt::AA_DontShowIconsInMenus);
@@ -617,7 +631,11 @@ int main(int argc, char *argv[])
     // Because of the POODLE attack it is recommended to disable SSLv3 (https://disablessl3.com/),
     // so set SSL protocols to TLS1.0+.
     QSslConfiguration sslconf = QSslConfiguration::defaultConfiguration();
+#if QT_VERSION >= QT_VERSION_CHECK(6, 3, 0)
+    sslconf.setProtocol(QSsl::TlsV1_2OrLater);
+#else
     sslconf.setProtocol(QSsl::TlsV1_0OrLater);
+#endif
     QSslConfiguration::setDefaultConfiguration(sslconf);
 #endif
 
