@@ -449,6 +449,13 @@ if (BUILD_RAVENCOIN_QT)
     )
     protobuf_generate_cpp(PROTOBUF_SRCS PROTOBUF_HDRS ${PROTOBUF_PROTO})
 
+    set(PROTOBUF_LINK_LIBS ${PROTOBUF_LIBRARIES})
+    if(TARGET protobuf::libprotobuf)
+        set(PROTOBUF_LINK_LIBS protobuf::libprotobuf)
+    elseif(TARGET Protobuf::libprotobuf)
+        set(PROTOBUF_LINK_LIBS Protobuf::libprotobuf)
+    endif()
+
     add_executable(raven-qt
         src/qt/raven.cpp
         ${RAVEN_QT_SRC}
@@ -477,7 +484,7 @@ if (BUILD_RAVENCOIN_QT)
             ${libunivalue_LDFLAGS}
             ${MINIUPNPC_LDFLAGS}# Aggiunto
             ${CMAKE_DL_LIBS}  # Aggiunto
-            ${PROTOBUF_LIBRARIES}
+            ${PROTOBUF_LINK_LIBS}
             )
     if (LIBSPH_LIBRARY_DIRS)
         target_link_directories(raven-qt PRIVATE ${LIBSPH_LIBRARY_DIRS})
