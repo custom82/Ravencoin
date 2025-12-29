@@ -12,3 +12,4 @@
 #cmakedefine01 ENABLE_ZMQ
 #cmakedefine01 USE_QRCODE
 #cmakedefine01 USE_UPNP
+#cmakedefine01 HAVE_DECL_DAEMON

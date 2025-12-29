@@ -119,9 +119,12 @@ endif()
 pkg_check_modules(LIBSPH REQUIRED libsph)
 include(CheckIncludeFile)
 include(CheckFunctionExists)
+include(CheckSymbolExists)
 set(CMAKE_REQUIRED_INCLUDES ${LIBSPH_INCLUDE_DIRS})
 check_include_file("libsph/sph_tiger.h" LIBSPH_HAS_TIGER_HEADER)
 unset(CMAKE_REQUIRED_INCLUDES)
+
+check_symbol_exists(daemon "unistd.h" HAVE_DECL_DAEMON)
 
 set(LIBSPH_HAS_TIGER_SYMBOL FALSE)
 foreach(LIBSPH_NAME sph libsph)
