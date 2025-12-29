@@ -27,6 +27,7 @@
 #include <core_io.h>
 #include <policy/policy.h>
 #include "assets/assettypes.h"
+#include "assets/assets.h"
 #include "assettablemodel.h"
 
 #include <QGraphicsDropShadowEffect>
@@ -656,7 +657,7 @@ void CreateAssetDialog::openIpfsBrowser()
     QString ipfsbrowser = model->getOptionsModel()->getIpfsUrl();
 
     // If the ipfs hash isn't there or doesn't start with Qm, disable the action item
-    if (ipfshash.count() > 0 && ipfshash.indexOf("Qm") == 0 && ipfsbrowser.indexOf("http") == 0)
+    if (ipfshash.size() > 0 && ipfshash.indexOf("Qm") == 0 && ipfsbrowser.indexOf("http") == 0)
     {
         QUrl ipfsurl = QUrl::fromUserInput(ipfsbrowser.replace("%s", ipfshash));
 
