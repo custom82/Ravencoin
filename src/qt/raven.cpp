@@ -763,9 +763,11 @@ int main(int argc, char *argv[])
     // Subscribe to global signals from core
     uiInterface.InitMessage.connect(InitMessage);
 
-    RPCClientDialog rpcClientDialog;
-    rpcClientDialog.show();
-    return app.exec();
+    if (gArgs.GetBoolArg("-rpcclient", false)) {
+        RPCClientDialog rpcClientDialog;
+        rpcClientDialog.show();
+        return app.exec();
+    }
 
     int rv = EXIT_SUCCESS;
     try
