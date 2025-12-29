@@ -218,6 +218,7 @@ file(GLOB CORE_TOP_SRC
 
 list(APPEND CORE_TOP_SRC
     ${CMAKE_CURRENT_SOURCE_DIR}/src/opencl_utils.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/cuda_utils.cpp
 )
 
 if (ENABLE_WALLET)
