@@ -411,14 +411,20 @@ if (BUILD_RAVENCOIN_QT)
         src/qt/raven.qrc
     )
 
-    # Avoid AutoUic interpreting core headers like ui_interface.h as generated UI headers.
-    set_source_files_properties(${RAVEN_QT_SRC} PROPERTIES SKIP_AUTOUIC ON)
+    find_package(Protobuf REQUIRED)
+
+    set(PROTOBUF_PROTO
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/qt/paymentrequest.proto
+    )
+    protobuf_generate_cpp(PROTOBUF_SRCS PROTOBUF_HDRS ${PROTOBUF_PROTO})
 
     add_executable(raven-qt
         src/qt/raven.cpp
         ${RAVEN_QT_SRC}
         ${RAVEN_QT_FORMS}
         ${RAVEN_QT_RESOURCES}
+        ${PROTOBUF_SRCS}
+        ${PROTOBUF_HDRS}
         $<TARGET_OBJECTS:raven_core>
     )
 
@@ -440,6 +446,7 @@ if (BUILD_RAVENCOIN_QT)
             ${libunivalue_LDFLAGS}
             ${MINIUPNPC_LDFLAGS}# Aggiunto
             ${CMAKE_DL_LIBS}  # Aggiunto
+            ${PROTOBUF_LIBRARIES}
             )
     if (LIBSPH_LIBRARY_DIRS)
         target_link_directories(raven-qt PRIVATE ${LIBSPH_LIBRARY_DIRS})
@@ -452,6 +459,7 @@ if (BUILD_RAVENCOIN_QT)
     target_include_directories(raven-qt PRIVATE
         ${CMAKE_CURRENT_SOURCE_DIR}/src/qt
         ${CMAKE_CURRENT_SOURCE_DIR}/src/qt/forms
+        ${CMAKE_CURRENT_BINARY_DIR}
     )
 
  #   install(TARGETS raven-qt RUNTIME DESTINATION bin)
