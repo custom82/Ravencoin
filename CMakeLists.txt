@@ -456,6 +456,7 @@ if (BUILD_RAVENCOIN_QT)
         set(PROTOBUF_LINK_LIBS Protobuf::libprotobuf)
     endif()
     find_library(ABSL_LOG_INTERNAL_CHECK_OP_LIB absl_log_internal_check_op)
+    find_library(ABSL_LOG_INTERNAL_MESSAGE_LIB absl_log_internal_message)
 
     add_executable(raven-qt
         src/qt/raven.cpp
@@ -489,6 +490,9 @@ if (BUILD_RAVENCOIN_QT)
             )
     if (ABSL_LOG_INTERNAL_CHECK_OP_LIB)
         target_link_libraries(raven-qt PRIVATE ${ABSL_LOG_INTERNAL_CHECK_OP_LIB})
+    endif()
+    if (ABSL_LOG_INTERNAL_MESSAGE_LIB)
+        target_link_libraries(raven-qt PRIVATE ${ABSL_LOG_INTERNAL_MESSAGE_LIB})
     endif()
     if (LIBSPH_LIBRARY_DIRS)
         target_link_directories(raven-qt PRIVATE ${LIBSPH_LIBRARY_DIRS})
