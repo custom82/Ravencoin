@@ -3,6 +3,8 @@
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
+#include "config/raven-config.h"
+
 #include "restrictedassetsdialog.h"
 #include "ui_restrictedassetsdialog.h"
 
@@ -16,6 +18,7 @@
 #include "assetfilterproxy.h"
 
 #include "base58.h"
+#include "assets/assets.h"
 #include "chainparams.h"
 #include "validation.h" // mempool and minRelayTxFee
 #include "txmempool.h"
@@ -458,7 +461,6 @@ void RestrictedAssetsDialog::assignQualifierClicked()
 
     widget->clear();
 }
-
 
 
 
