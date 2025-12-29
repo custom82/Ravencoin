@@ -18,7 +18,6 @@
 #include "base58.h"
 #include "chainparams.h"
 #include "validation.h" // mempool and minRelayTxFee
-#include "ui_interface.h"
 #include "txmempool.h"
 #include "policy/fees.h"
 #include "wallet/fees.h"
@@ -459,7 +458,6 @@ void RestrictedAssetsDialog::assignQualifierClicked()
 
     widget->clear();
 }
-
 
 
 
