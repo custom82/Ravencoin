@@ -66,39 +66,45 @@ bool TransactionFilterProxy::filterAcceptsRow(int sourceRow, const QModelIndex &
 
 void TransactionFilterProxy::setDateRange(const QDateTime &from, const QDateTime &to)
 {
+    beginFilterChange();
     this->dateFrom = from;
     this->dateTo = to;
-    invalidateFilter();
+    endFilterChange();
 }
 
 void TransactionFilterProxy::setAddressPrefix(const QString &_addrPrefix)
 {
+    beginFilterChange();
     this->addrPrefix = _addrPrefix;
-    invalidateFilter();
+    endFilterChange();
 }
 
 void TransactionFilterProxy::setTypeFilter(quint32 modes)
 {
+    beginFilterChange();
     this->typeFilter = modes;
-    invalidateFilter();
+    endFilterChange();
 }
 
 void TransactionFilterProxy::setMinAmount(const CAmount& minimum)
 {
+    beginFilterChange();
     this->minAmount = minimum;
-    invalidateFilter();
+    endFilterChange();
 }
 
 void TransactionFilterProxy::setAssetNamePrefix(const QString &_assetNamePrefix)
 {
+    beginFilterChange();
     this->assetNamePrefix = _assetNamePrefix;
-    invalidateFilter();
+    endFilterChange();
 }
 
 void TransactionFilterProxy::setWatchOnlyFilter(WatchOnlyFilter filter)
 {
+    beginFilterChange();
     this->watchOnlyFilter = filter;
-    invalidateFilter();
+    endFilterChange();
 }
 
 void TransactionFilterProxy::setLimit(int limit)
@@ -108,8 +114,9 @@ void TransactionFilterProxy::setLimit(int limit)
 
 void TransactionFilterProxy::setShowInactive(bool _showInactive)
 {
+    beginFilterChange();
     this->showInactive = _showInactive;
-    invalidateFilter();
+    endFilterChange();
 }
 
 int TransactionFilterProxy::rowCount(const QModelIndex &parent) const
