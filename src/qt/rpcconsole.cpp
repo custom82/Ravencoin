@@ -505,6 +505,15 @@ bool RPCConsole::eventFilter(QObject* obj, QEvent *event)
     if(event->type() == QEvent::KeyPress) // Special key handling
     {
         QKeyEvent *keyevt = static_cast<QKeyEvent*>(event);
+        auto cloneKeyEvent = [](const QKeyEvent* source) {
+            return new QKeyEvent(
+                static_cast<QKeyEvent::Type>(source->type()),
+                source->key(),
+                source->modifiers(),
+                source->text(),
+                source->isAutoRepeat(),
+                source->count());
+        };
         int key = keyevt->key();
         Qt::KeyboardModifiers mod = keyevt->modifiers();
         switch(key)
@@ -515,7 +524,7 @@ bool RPCConsole::eventFilter(QObject* obj, QEvent *event)
         case Qt::Key_PageDown:
             if(obj == ui->lineEdit)
             {
-                QApplication::postEvent(ui->messagesWidget, new QKeyEvent(*keyevt));
+                QApplication::postEvent(ui->messagesWidget, cloneKeyEvent(keyevt));
                 return true;
             }
             break;
@@ -523,7 +532,7 @@ bool RPCConsole::eventFilter(QObject* obj, QEvent *event)
         case Qt::Key_Enter:
             // forward these events to lineEdit
             if(obj == autoCompleter->popup()) {
-                QApplication::postEvent(ui->lineEdit, new QKeyEvent(*keyevt));
+                QApplication::postEvent(ui->lineEdit, cloneKeyEvent(keyevt));
                 return true;
             }
             break;
@@ -536,7 +545,7 @@ bool RPCConsole::eventFilter(QObject* obj, QEvent *event)
                   ((mod & Qt::ShiftModifier) && key == Qt::Key_Insert)))
             {
                 ui->lineEdit->setFocus();
-                QApplication::postEvent(ui->lineEdit, new QKeyEvent(*keyevt));
+                QApplication::postEvent(ui->lineEdit, cloneKeyEvent(keyevt));
                 return true;
             }
         }
