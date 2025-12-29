@@ -634,7 +634,12 @@ WalletModel::UnlockContext::~UnlockContext()
 void WalletModel::UnlockContext::CopyFrom(const UnlockContext& rhs)
 {
     // Transfer context; old object no longer relocks wallet
-    *this = rhs;
+    if (this == &rhs) {
+        return;
+    }
+    wallet = rhs.wallet;
+    valid = rhs.valid;
+    relock = rhs.relock;
     rhs.relock = false;
 }
 
