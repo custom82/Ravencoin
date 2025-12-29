@@ -440,6 +440,7 @@ if (BUILD_RAVENCOIN_QT)
 
     set(RAVEN_QT_RESOURCES
         src/qt/raven.qrc
+        src/qt/raven_locale.qrc
     )
 
     find_package(Protobuf REQUIRED)
@@ -500,6 +501,11 @@ if (BUILD_RAVENCOIN_QT)
 
     if (ENABLE_ZMQ)
         target_link_libraries(raven-qt PRIVATE ${LIBZMQ_LIBRARIES})
+    endif()
+
+    if (USE_QRCODE)
+        target_include_directories(raven-qt PRIVATE ${QRENCODE_INCLUDE_DIRS})
+        target_link_libraries(raven-qt PRIVATE ${QRENCODE_LIBRARIES})
     endif()
 
     target_include_directories(raven-qt PRIVATE
