@@ -424,6 +424,10 @@ if (BUILD_RAVENCOIN_QT)
 
     target_link_libraries(raven-qt
         PRIVATE
+            Qt6::Core
+            Qt6::Gui
+            Qt6::Network
+            Qt6::Widgets
             ${Boost_LIBRARIES}
             ${OPENSSL_LIBRARIES}
             ${BDB_LIBRARY}
