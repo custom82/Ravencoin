@@ -621,7 +621,14 @@ fs::path GetConfigFile(const std::string &confPath)
 {
     fs::path pathConfigFile(confPath);
     if (!pathConfigFile.is_absolute())
+    {
+#ifndef WIN32
+        fs::path etcConfigFile = fs::path("/etc/raven") / pathConfigFile;
+        if (fs::exists(etcConfigFile))
+            return etcConfigFile;
+#endif
         pathConfigFile = GetDataDir(false) / pathConfigFile;
+    }
 
     return pathConfigFile;
 }
