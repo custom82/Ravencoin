@@ -15,6 +15,9 @@
 #include "uint256.h"
 #include "version.h"
 
+#ifdef __cplusplus
+extern "C" {
+#endif
 #include "libsph/sph_blake.h"
 #include "libsph/sph_bmw.h"
 #include "libsph/sph_groestl.h"
@@ -32,10 +35,12 @@
 #include "libsph/sph_whirlpool.h"
 #include "libsph/sph_sha2.h"
 #include "libsph/sph_haval.h"
-
 #include "libsph/sph_tiger.h"
-#include "crypto/lyra2.h"
 #include "libsph/sph_gost.h"
+#ifdef __cplusplus
+}
+#endif
+#include "crypto/lyra2.h"
 
 #include <crypto/ethash/helpers.hpp>
 
