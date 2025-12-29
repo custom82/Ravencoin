@@ -64,6 +64,7 @@ std::string HelpMessageCli()
     strUsage += HelpMessageOpt("-conf=<file>", strprintf(_("Specify configuration file (default: %s)"), RAVEN_CONF_FILENAME));
     strUsage += HelpMessageOpt("-datadir=<dir>", _("Specify data directory"));
     strUsage += HelpMessageOpt("-getinfo", _("Get general information from the remote server. Note that unlike server-side RPC calls, the results of -getinfo is the result of multiple non-atomic requests. Some entries in the result may represent results from different states (e.g. wallet balance may be as of a different block from the chain state reported)"));
+    strUsage += HelpMessageOpt("-getstatistics", _("Get statistics from the remote server (network, blockchain, mempool, wallet, and chain transaction stats). The results are aggregated from multiple non-atomic requests."));
     AppendParamsHelpMessages(strUsage);
     strUsage += HelpMessageOpt("-named", strprintf(_("Pass named instead of positional arguments (default: %s)"), DEFAULT_NAMED));
     strUsage += HelpMessageOpt("-rpcconnect=<ip>", strprintf(_("Send commands to node running on <ip> (default: %s)"), DEFAULT_RPCCONNECT));
@@ -290,6 +291,58 @@ public:
     }
 };
 
+/** Process getstatistics requests */
+class GetstatisticsRequestHandler: public BaseRequestHandler
+{
+public:
+    const int ID_NETWORKINFO = 0;
+    const int ID_BLOCKCHAININFO = 1;
+    const int ID_MEMPOOLINFO = 2;
+    const int ID_WALLETINFO = 3;
+    const int ID_CHAINTXSTATS = 4;
+
+    /** Create a simulated `getstatistics` request. */
+    UniValue PrepareRequest(const std::string& method, const std::vector<std::string>& args) override
+    {
+        UniValue result(UniValue::VARR);
+        result.push_back(JSONRPCRequestObj("getnetworkinfo", NullUniValue, ID_NETWORKINFO));
+        result.push_back(JSONRPCRequestObj("getblockchaininfo", NullUniValue, ID_BLOCKCHAININFO));
+        result.push_back(JSONRPCRequestObj("getmempoolinfo", NullUniValue, ID_MEMPOOLINFO));
+        result.push_back(JSONRPCRequestObj("getwalletinfo", NullUniValue, ID_WALLETINFO));
+        result.push_back(JSONRPCRequestObj("getchaintxstats", NullUniValue, ID_CHAINTXSTATS));
+        return result;
+    }
+
+    /** Collect values from the batch and form a simulated `getstatistics` reply. */
+    UniValue ProcessReply(const UniValue &batch_in) override
+    {
+        UniValue result(UniValue::VOBJ);
+        std::vector<UniValue> batch = JSONRPCProcessBatchReply(batch_in, 5);
+
+        if (!batch[ID_NETWORKINFO]["error"].isNull()) {
+            return batch[ID_NETWORKINFO];
+        }
+        if (!batch[ID_BLOCKCHAININFO]["error"].isNull()) {
+            return batch[ID_BLOCKCHAININFO];
+        }
+        if (!batch[ID_MEMPOOLINFO]["error"].isNull()) {
+            return batch[ID_MEMPOOLINFO];
+        }
+        if (!batch[ID_CHAINTXSTATS]["error"].isNull()) {
+            return batch[ID_CHAINTXSTATS];
+        }
+
+        result.pushKV("network", batch[ID_NETWORKINFO]["result"]);
+        result.pushKV("blockchain", batch[ID_BLOCKCHAININFO]["result"]);
+        result.pushKV("mempool", batch[ID_MEMPOOLINFO]["result"]);
+        if (!batch[ID_WALLETINFO].isNull()) {
+            result.pushKV("wallet", batch[ID_WALLETINFO]["result"]);
+        }
+        result.pushKV("chaintxstats", batch[ID_CHAINTXSTATS]["result"]);
+        return JSONRPCReplyObj(result, NullUniValue, 1);
+    }
+};
+
 /** Process default single requests */
 class DefaultRequestHandler: public BaseRequestHandler {
 public:
@@ -430,7 +483,10 @@ int CommandLineRPC(int argc, char *argv[])
         }
         std::unique_ptr<BaseRequestHandler> rh;
         std::string method;
-        if (gArgs.GetBoolArg("-getinfo", false)) {
+        if (gArgs.GetBoolArg("-getstatistics", false)) {
+            rh.reset(new GetstatisticsRequestHandler());
+            method = "";
+        } else if (gArgs.GetBoolArg("-getinfo", false)) {
             rh.reset(new GetinfoRequestHandler());
             method = "";
         } else {
