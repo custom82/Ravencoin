@@ -24,6 +24,7 @@
 #include "script/standard.h"
 #include "timedata.h"
 #include "txmempool.h"
+#include "opencl_utils.h"
 #include "util.h"
 #include "utilmoneystr.h"
 #include "validationinterface.h"
@@ -535,11 +536,11 @@ CWallet *GetFirstWallet() {
     return(NULL);
 }
 
-void static RavenMiner(const CChainParams& chainparams)
+void static RavenMiner(const CChainParams& chainparams, bool use_opencl)
 {
-    LogPrintf("RavenMiner -- started\n");
+    LogPrintf("RavenMiner%s -- started\n", use_opencl ? " (OpenCL)" : "");
     SetThreadPriority(THREAD_PRIORITY_LOWEST);
-    RenameThread("raven-miner");
+    RenameThread(use_opencl ? "raven-opencl-miner" : "raven-miner");
 
     unsigned int nExtraNonce = 0;
 
@@ -619,7 +620,9 @@ void static RavenMiner(const CChainParams& chainparams)
             CBlock *pblock = &pblocktemplate->block;
             IncrementExtraNonce(pblock, pindexPrev, nExtraNonce);
 
-            LogPrintf("RavenMiner -- Running miner with %u transactions in block (%u bytes)\n", pblock->vtx.size(),
+            LogPrintf("RavenMiner%s -- Running miner with %u transactions in block (%u bytes)\n",
+                use_opencl ? " (OpenCL)" : "",
+                pblock->vtx.size(),
                 ::GetSerializeSize(*pblock, SER_NETWORK, PROTOCOL_VERSION));
 
             //
@@ -717,6 +720,13 @@ int GenerateRavens(bool fGenerate, int nThreads, const CChainParams& chainparams
         return numCores;
 
     minerThreads = new boost::thread_group();
+
+    const bool use_opencl = OpenCLGpuAvailable();
+    if (use_opencl) {
+        LogPrintf("RavenMiner -- OpenCL GPU detected, using GPU mining\n");
+    } else {
+        LogPrintf("RavenMiner -- OpenCL GPU not detected, falling back to CPU mining\n");
+    }
     
     //Reset metrics
     nMiningTimeStart = GetTimeMicros();
@@ -724,7 +734,7 @@ int GenerateRavens(bool fGenerate, int nThreads, const CChainParams& chainparams
     nHashesPerSec = 0;
 
     for (int i = 0; i < nThreads; i++){
-        minerThreads->create_thread(boost::bind(&RavenMiner, boost::cref(chainparams)));
+        minerThreads->create_thread(boost::bind(&RavenMiner, boost::cref(chainparams), use_opencl));
     }
 
     return(numCores);
