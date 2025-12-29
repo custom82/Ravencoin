@@ -11,23 +11,48 @@
 #include "chainparamsbase.h"
 #include "clientversion.h"
 #include "fs.h"
+#include "rpc/register.h"
 #include "rpc/client.h"
 #include "rpc/protocol.h"
+#include "rpc/server.h"
 #include "util.h"
 #include "utilstrencodings.h"
 
 #include <stdio.h>
 
+#include <algorithm>
 #include <event2/buffer.h>
 #include <event2/keyvalq_struct.h>
 #include "support/events.h"
 
 #include <univalue.h>
 
+#ifdef ENABLE_WALLET
+#include "wallet/rpcwallet.h"
+#endif
+
 static const char DEFAULT_RPCCONNECT[] = "127.0.0.1";
 static const int DEFAULT_HTTP_CLIENT_TIMEOUT=900;
 static const bool DEFAULT_NAMED=false;
 static const int CONTINUE_EXECUTION=-1;
+
+static std::string ListRPCCommands()
+{
+    CRPCTable tableRPC;
+    RegisterAllCoreRPCCommands(tableRPC);
+#ifdef ENABLE_WALLET
+    RegisterWalletRPCCommands(tableRPC);
+#endif
+    std::vector<std::string> commands = tableRPC.listCommands();
+    std::sort(commands.begin(), commands.end());
+
+    std::string list;
+    for (const auto& command : commands) {
+        list += "  " + command + "\n";
+    }
+
+    return list;
+}
 
 std::string HelpMessageCli()
 {
@@ -50,6 +75,8 @@ std::string HelpMessageCli()
     strUsage += HelpMessageOpt("-stdinrpcpass", strprintf(_("Read RPC password from standard input as a single line.  When combined with -stdin, the first line from standard input is used for the RPC password.")));
     strUsage += HelpMessageOpt("-stdin", _("Read extra arguments from standard input, one per line until EOF/Ctrl-D (recommended for sensitive information such as passphrases).  When combined with -stdinrpcpass, the first line from standard input is used for the RPC password."));
     strUsage += HelpMessageOpt("-rpcwallet=<walletname>", _("Send RPC for non-default wallet on RPC server (argument is wallet filename in ravend directory, required if ravend/-Qt runs with multiple wallets)"));
+    strUsage += "\n" + _("RPC commands:") + "\n";
+    strUsage += ListRPCCommands();
 
     return strUsage;
 }
