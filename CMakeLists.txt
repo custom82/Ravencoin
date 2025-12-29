@@ -412,8 +412,14 @@ if (BUILD_RAVENCOIN_QT)
 
     file(GLOB RAVEN_QT_SRC
         src/qt/*.cpp
-        src/qt/*.mm
     )
+
+    if(APPLE)
+        list(APPEND RAVEN_QT_SRC
+            src/qt/macdockiconhandler.mm
+            src/qt/macnotificationhandler.mm
+        )
+    endif()
 
     set(RAVEN_QT_AUTOUIC_SKIP
         src/qt/clientmodel.cpp
