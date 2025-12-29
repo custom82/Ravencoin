@@ -335,6 +335,7 @@ if (BUILD_RAVENCOIND)
     endif()
 
     install(TARGETS ravend RUNTIME DESTINATION bin)
+    install(FILES doc/man/ravend.1 DESTINATION share/man/man1)
 endif()
 
 # ======================================
@@ -370,6 +371,7 @@ if (BUILD_RAVENCOIN_CLI)
     endif()
 
     install(TARGETS raven-cli RUNTIME DESTINATION bin)
+    install(FILES doc/man/raven-cli.1 DESTINATION share/man/man1)
 endif()
 
 # ======================================
@@ -405,6 +407,7 @@ if (BUILD_RAVENCOIN_TX)
     endif()
 
     install(TARGETS raven-tx RUNTIME DESTINATION bin)
+    install(FILES doc/man/raven-tx.1 DESTINATION share/man/man1)
 endif()
 
 # ======================================
@@ -536,6 +539,7 @@ if (BUILD_RAVENCOIN_QT)
     )
 
     install(TARGETS raven-qt RUNTIME DESTINATION bin)
+    install(FILES doc/man/raven-qt.1 DESTINATION share/man/man1)
     install(FILES ${RAVEN_QT_QM_FILES} DESTINATION share/ravencoin/locale)
 endif()
 
