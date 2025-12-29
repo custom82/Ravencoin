@@ -426,6 +426,7 @@ if (BUILD_RAVENCOIN_QT)
         src/qt/paymentserver.cpp
         src/qt/raven.cpp
         src/qt/ravengui.cpp
+        src/qt/sendcoinsdialog.cpp
         src/qt/splashscreen.cpp
         src/qt/transactionview.cpp
         src/qt/walletmodel.cpp
