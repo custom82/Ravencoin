@@ -24,6 +24,16 @@ option(ENABLE_UPNP         "Enable UPnP support"              ON)
 option(USE_QRCODE          "Enable QRCode support"            ON)
 
 # ======================================
+# Config header
+# ======================================
+add_compile_definitions(HAVE_CONFIG_H)
+file(MAKE_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/config)
+configure_file(
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/config/raven-config.h.in
+    ${CMAKE_CURRENT_BINARY_DIR}/config/raven-config.h
+)
+
+# ======================================
 # Compilatore
 # ======================================
 set(CMAKE_CXX_STANDARD 23)
@@ -179,6 +189,7 @@ include_directories(
     ${SECP256K1_INCLUDE_DIR}
     ${leveldb_INCLUDE_DIR}  # Aggiunto qui
     ${CMAKE_DL_INCLUDE_LIBS}
+    ${CMAKE_CURRENT_BINARY_DIR}
 )
 
 set(CMAKE_AUTOUIC_SEARCH_PATHS

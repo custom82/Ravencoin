@@ -1,0 +1,14 @@
+// Copyright (c) 2009-2010 Satoshi Nakamoto
+// Copyright (c) 2009-2016 The Bitcoin Core developers
+// Copyright (c) 2017-2024 The Raven Core developers
+// Distributed under the MIT software license, see the accompanying
+// file COPYING or http://www.opensource.org/licenses/mit-license.php.
+
+#pragma once
+
+#define HAVE_CONFIG_H 1
+
+#cmakedefine01 ENABLE_WALLET
+#cmakedefine01 ENABLE_ZMQ
+#cmakedefine01 USE_QRCODE
+#cmakedefine01 USE_UPNP
