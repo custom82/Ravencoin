@@ -763,14 +763,9 @@ int main(int argc, char *argv[])
     // Subscribe to global signals from core
     uiInterface.InitMessage.connect(InitMessage);
 
-    if (gArgs.GetBoolArg("-rpcclient", false)) {
-        RPCClientDialog rpcClientDialog;
-        rpcClientDialog.show();
-        return app.exec();
-    }
-
-    if (gArgs.GetBoolArg("-splash", DEFAULT_SPLASHSCREEN) && !gArgs.GetBoolArg("-min", false))
-        app.createSplashScreen(networkStyle.data());
+    RPCClientDialog rpcClientDialog;
+    rpcClientDialog.show();
+    return app.exec();
 
     int rv = EXIT_SUCCESS;
     try
