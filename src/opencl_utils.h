@@ -5,6 +5,10 @@
 #ifndef RAVEN_OPENCL_UTILS_H
 #define RAVEN_OPENCL_UTILS_H
 
+#include <string>
+#include <vector>
+
 bool OpenCLGpuAvailable();
+std::vector<std::string> ListOpenCLDevices(std::string* error_out);
 
 #endif // RAVEN_OPENCL_UTILS_H
