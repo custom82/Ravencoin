@@ -247,6 +247,7 @@ set(RAVEN_CORE_SOURCES
 
 # Evita che AutoUic cerchi un .ui inesistente per wallet.h
 #set_source_files_properties(src/wallet/wallet.h PROPERTIES SKIP_AUTOUIC ON)
+set_source_files_properties(src/ui_interface.h PROPERTIES SKIP_AUTOUIC ON)
 
 # ======================================
 # Libreria "core" (OBJECT)
