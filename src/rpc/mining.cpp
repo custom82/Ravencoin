@@ -337,7 +337,8 @@ UniValue getblocktemplate(const JSONRPCRequest& request)
             "       \"rules\":[            (array, optional) A list of strings\n"
             "           \"support\"          (string) client side supported softfork deployment\n"
             "           ,...\n"
-            "       ]\n"
+            "       ],\n"
+            "       \"kawpow\": true|false  (boolean, optional) request KAWPOW header/epoch data for GPU/OpenCL miners\n"
             "     }\n"
             "\n"
 
@@ -384,7 +385,9 @@ UniValue getblocktemplate(const JSONRPCRequest& request)
             "  \"weightlimit\" : n,                (numeric) limit of block weight\n"
             "  \"curtime\" : ttt,                  (numeric) current timestamp in seconds since epoch (Jan 1 1970 GMT)\n"
             "  \"bits\" : \"xxxxxxxx\",              (string) compressed target of next block\n"
-            "  \"height\" : n                      (numeric) The height of the next block\n"
+            "  \"height\" : n,                     (numeric) The height of the next block\n"
+            "  \"pprpcheader\" : \"xxxx\",          (string, optional) KAWPOW header hash for GPU/OpenCL miners\n"
+            "  \"pprpcepoch\" : n                  (numeric, optional) KAWPOW epoch number for GPU/OpenCL miners\n"
             "}\n"
 
             "\nExamples:\n"
@@ -398,6 +401,7 @@ UniValue getblocktemplate(const JSONRPCRequest& request)
     UniValue lpval = NullUniValue;
     std::set<std::string> setClientRules;
     int64_t nMaxVersionPreVB = -1;
+    bool fKawpowTemplate = false;
     if (!request.params[0].isNull())
     {
         const UniValue& oparam = request.params[0].get_obj();
@@ -454,6 +458,12 @@ UniValue getblocktemplate(const JSONRPCRequest& request)
             if (uvMaxVersion.isNum()) {
                 nMaxVersionPreVB = uvMaxVersion.get_int64();
             }
+        }
+        const UniValue kawpowval = find_value(oparam, "kawpow");
+        if (kawpowval.isBool()) {
+            fKawpowTemplate = kawpowval.get_bool();
+        } else if (!kawpowval.isNull()) {
+            throw JSONRPCError(RPC_INVALID_PARAMETER, "Invalid kawpow flag");
         }
     }
 
@@ -717,7 +727,7 @@ UniValue getblocktemplate(const JSONRPCRequest& request)
 
     if (pblock->nTime >= nKAWPOWActivationTime) {
         std::string address = gArgs.GetArg("-miningaddress", "");
-        if (IsValidDestinationString(address)) {
+        if (fKawpowTemplate || IsValidDestinationString(address)) {
             static std::string lastheader = "";
             if (mapRVNKAWBlockTemplates.count(lastheader)) {
                 if (pblock->nTime - 30 < mapRVNKAWBlockTemplates.at(lastheader).nTime) {
