@@ -401,7 +401,7 @@ UniValue getblocktemplate(const JSONRPCRequest& request)
     UniValue lpval = NullUniValue;
     std::set<std::string> setClientRules;
     int64_t nMaxVersionPreVB = -1;
-    bool fKawpowTemplate = false;
+    bool fKawpowTemplate = true;
     if (!request.params[0].isNull())
     {
         const UniValue& oparam = request.params[0].get_obj();
