@@ -327,7 +327,7 @@ if (BUILD_RAVENCOIND)
         target_link_libraries(ravend PRIVATE ${LIBZMQ_LIBRARIES})
     endif()
 
-#    install(TARGETS ravend RUNTIME DESTINATION bin)
+    install(TARGETS ravend RUNTIME DESTINATION bin)
 endif()
 
 # ======================================
@@ -397,7 +397,7 @@ if (BUILD_RAVENCOIN_TX)
         target_link_libraries(raven-tx PRIVATE ${LIBZMQ_LIBRARIES})
     endif()
 
-#    install(TARGETS raven-tx RUNTIME DESTINATION bin)
+    install(TARGETS raven-tx RUNTIME DESTINATION bin)
 endif()
 
 # ======================================
@@ -528,5 +528,26 @@ if (BUILD_RAVENCOIN_QT)
         ${CMAKE_CURRENT_BINARY_DIR}
     )
 
- #   install(TARGETS raven-qt RUNTIME DESTINATION bin)
+    install(TARGETS raven-qt RUNTIME DESTINATION bin)
+    install(FILES ${RAVEN_QT_QM_FILES} DESTINATION share/ravencoin/locale)
+endif()
+
+install(FILES
+    share/pixmaps/raven.ico
+    share/pixmaps/raven.BMP
+    share/pixmaps/raven16.png
+    share/pixmaps/raven32.png
+    share/pixmaps/raven64.png
+    share/pixmaps/raven128.png
+    share/pixmaps/raven256.png
+    share/pixmaps/raven16.xpm
+    share/pixmaps/raven32.xpm
+    share/pixmaps/raven64.xpm
+    share/pixmaps/raven128.xpm
+    share/pixmaps/raven256.xpm
+    DESTINATION share/pixmaps
+)
+
+if (BUILD_RAVENCOIND)
+    install(FILES contrib/init/ravend.service DESTINATION lib/systemd/system)
 endif()
