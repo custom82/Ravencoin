@@ -3,6 +3,7 @@
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
+#include "config/raven-config.h"
 
 #include "reissueassetdialog.h"
 #include "ui_reissueassetdialog.h"
@@ -13,6 +14,7 @@
 #include "core_io.h"
 #include "univalue.h"
 #include "assets/assettypes.h"
+#include "assets/assets.h"
 #include "ravenunits.h"
 #include "optionsmodel.h"
 #include "sendcoinsdialog.h"
@@ -1490,5 +1492,4 @@ void ReissueAssetDialog::hideInvalidVerifierStringMessage()
     ui->labelReissueVerifierStringErrorMessage->clear();
     ui->labelReissueVerifierStringErrorMessage->hide();
 }
-
 

@@ -629,7 +629,11 @@ void AssetControlDialog::updateView()
     ui->treeWidget->setEnabled(false); // performance, otherwise updateLabels would be called for every checked checkbox
     ui->treeWidget->setAlternatingRowColors(!treeMode);
     QFlags<Qt::ItemFlag> flgCheckbox = Qt::ItemIsSelectable | Qt::ItemIsEnabled | Qt::ItemIsUserCheckable;
+#if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
+    QFlags<Qt::ItemFlag> flgTristate = Qt::ItemIsSelectable | Qt::ItemIsEnabled | Qt::ItemIsUserCheckable | Qt::ItemIsAutoTristate;
+#else
     QFlags<Qt::ItemFlag> flgTristate = Qt::ItemIsSelectable | Qt::ItemIsEnabled | Qt::ItemIsUserCheckable | Qt::ItemIsTristate;
+#endif
 
     int nDisplayUnit = model->getOptionsModel()->getDisplayUnit();
 

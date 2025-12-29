@@ -47,9 +47,11 @@
 #include <QDoubleValidator>
 #include <QFileDialog>
 #include <QFont>
+#include <QLocale>
 #include <QLineEdit>
 #include <QRegularExpression>
 #include <QSettings>
+#include <QStandardPaths>
 #include <QTextDocument> // for Qt::mightBeRichText
 #include <QThread>
 #include <QMouseEvent>
@@ -131,7 +133,7 @@ QFont getTopLabelFont(int weight, int pxsize)
 #if !defined(Q_OS_MAC)
     labelTopFont.setFamily("Open Sans");
 #endif
-    labelTopFont.setWeight(weight);
+    labelTopFont.setWeight(static_cast<QFont::Weight>(weight));
     labelTopFont.setLetterSpacing(QFont::SpacingType::AbsoluteSpacing, -0.6);
     labelTopFont.setPixelSize(pxsize);
     return labelTopFont;
@@ -163,12 +165,16 @@ QGraphicsDropShadowEffect* getShadowEffect()
 
 QString dateTimeStr(const QDateTime &date)
 {
-    return date.date().toString(Qt::SystemLocaleShortDate) + QString(" ") + date.toString("hh:mm");
+    return QLocale::system().toString(date.date(), QLocale::ShortFormat) + QString(" ") + date.toString("hh:mm");
 }
 
 QString dateTimeStr(qint64 nTime)
 {
+#if QT_VERSION >= QT_VERSION_CHECK(5, 8, 0)
+    return dateTimeStr(QDateTime::fromSecsSinceEpoch(static_cast<qint64>(nTime)));
+#else
     return dateTimeStr(QDateTime::fromTime_t((qint32)nTime));
+#endif
 }
 
 QFont fixedPitchFont()

@@ -3,6 +3,8 @@
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
+#include "config/raven-config.h"
+
 #include "assetsdialog.h"
 #include "sendcoinsdialog.h"
 #include "ui_assetsdialog.h"
@@ -19,6 +21,7 @@
 #include "assettablemodel.h"
 
 #include "base58.h"
+#include "assets/assets.h"
 #include "chainparams.h"
 #include "wallet/coincontrol.h"
 #include "validation.h" // mempool and minRelayTxFee
