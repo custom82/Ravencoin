@@ -442,7 +442,7 @@ if (BUILD_RAVENCOIN_QT)
         ${CMAKE_CURRENT_SOURCE_DIR}/src/qt/locale/*.ts
     )
     qt6_add_translation(RAVEN_QT_QM_FILES ${RAVEN_QT_TS_FILES})
-    set(RAVEN_QT_LOCALE_QRC ${CMAKE_CURRENT_BINARY_DIR}/raven_locale_generated.qrc)
+    set(RAVEN_QT_LOCALE_QRC ${CMAKE_CURRENT_BINARY_DIR}/raven_locale.qrc)
     file(WRITE ${RAVEN_QT_LOCALE_QRC} "<RCC>\n    <qresource prefix=\"/translations\">\n")
     foreach(qm_file ${RAVEN_QT_QM_FILES})
         get_filename_component(qm_name ${qm_file} NAME)
