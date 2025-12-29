@@ -6,7 +6,7 @@
 
 #include "noui.h"
 
-#include "ui_interface.h"
+#include "clientuiinterface.h"
 #include "util.h"
 
 #include <cstdio>

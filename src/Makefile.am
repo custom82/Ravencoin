@@ -210,7 +210,7 @@ RAVEN_CORE_H = \
   torcontrol.h \
   txdb.h \
   txmempool.h \
-  ui_interface.h \
+  clientuiinterface.h \
   undo.h \
   util.h \
   utilmoneystr.h \

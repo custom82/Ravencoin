@@ -26,7 +26,7 @@
 #include "restrictedassetsdialog.h"
 #include <validation.h>
 
-#include "ui_interface.h"
+#include "clientuiinterface.h"
 
 #include <QAction>
 #include <QActionGroup>

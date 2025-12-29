@@ -14,7 +14,7 @@
 #include "clientversion.h"
 #include "init.h"
 #include "util.h"
-#include "ui_interface.h"
+#include "clientuiinterface.h"
 #include "version.h"
 
 #ifdef ENABLE_WALLET

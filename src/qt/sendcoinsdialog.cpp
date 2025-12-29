@@ -21,7 +21,7 @@
 #include "chainparams.h"
 #include "wallet/coincontrol.h"
 #include "validation.h" // mempool and minRelayTxFee
-#include "ui_interface.h"
+#include "clientuiinterface.h"
 #include "txmempool.h"
 #include "policy/fees.h"
 #include "wallet/fees.h"

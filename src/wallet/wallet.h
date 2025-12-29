@@ -11,7 +11,7 @@
 #include "policy/feerate.h"
 #include "streams.h"
 #include "tinyformat.h"
-#include "ui_interface.h"
+#include "clientuiinterface.h"
 #include "utilstrencodings.h"
 #include "validationinterface.h"
 #include "script/ismine.h"

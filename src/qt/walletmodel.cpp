@@ -25,7 +25,7 @@
 #include "policy/fees.h"
 #include "policy/rbf.h"
 #include "sync.h"
-#include "ui_interface.h"
+#include "clientuiinterface.h"
 #include "util.h" // for GetBoolArg
 #include "wallet/coincontrol.h"
 #include "wallet/feebumper.h"

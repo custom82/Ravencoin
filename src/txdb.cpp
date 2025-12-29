@@ -12,7 +12,7 @@
 #include "pow.h"
 #include "uint256.h"
 #include "util.h"
-#include "ui_interface.h"
+#include "clientuiinterface.h"
 #include "init.h"
 #include "validation.h"
 
