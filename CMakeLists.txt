@@ -4,7 +4,7 @@ cmake_minimum_required(VERSION 3.20)
 cmake_policy(SET CMP0167 NEW)
 
 project(Ravencoin
-    VERSION 4.6.0
+    VERSION 6.0.0
     LANGUAGES C CXX
 )
 
@@ -48,8 +48,8 @@ endif()
 
 # Version info per clientversion.h
 add_definitions(
-    -DCLIENT_VERSION_MAJOR=4
-    -DCLIENT_VERSION_MINOR=6
+    -DCLIENT_VERSION_MAJOR=6
+    -DCLIENT_VERSION_MINOR=0
     -DCLIENT_VERSION_REVISION=0
     -DCLIENT_VERSION_BUILD=0
     -DCLIENT_VERSION_IS_RELEASE=0
