@@ -173,7 +173,7 @@ QString dateTimeStr(qint64 nTime)
 #if QT_VERSION >= QT_VERSION_CHECK(5, 8, 0)
     return dateTimeStr(QDateTime::fromSecsSinceEpoch(static_cast<qint64>(nTime)));
 #else
-    return dateTimeStr(QDateTime::fromTime_t((qint32)nTime));
+    return dateTimeStr(QDateTime::fromSecsSinceEpoch(static_cast<qint64>(nTime)));
 #endif
 }
 
