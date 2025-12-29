@@ -404,6 +404,20 @@ if (BUILD_RAVENCOIN_QT)
         src/qt/*.mm
     )
 
+    set(RAVEN_QT_AUTOUIC_SKIP
+        src/qt/clientmodel.cpp
+        src/qt/paymentserver.cpp
+        src/qt/raven.cpp
+        src/qt/ravengui.cpp
+        src/qt/sendcoinsdialog.cpp
+        src/qt/splashscreen.cpp
+        src/qt/transactionview.cpp
+        src/qt/walletmodel.cpp
+        src/qt/walletview.cpp
+    )
+
+    set_source_files_properties(${RAVEN_QT_AUTOUIC_SKIP} PROPERTIES SKIP_AUTOUIC ON)
+
     file(GLOB RAVEN_QT_FORMS
         src/qt/forms/*.ui
     )
