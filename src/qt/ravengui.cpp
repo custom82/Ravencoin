@@ -83,7 +83,7 @@ using namespace boost::placeholders;
 #include <validation.h>
 #include <tinyformat.h>
 #include <QFontDatabase>
-#include <univalue/include/univalue.h>
+#include <univalue.h>
 #include <QDesktopServices>
 
 #endif
