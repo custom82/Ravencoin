@@ -9,7 +9,7 @@ Group=raven
 Type=forking
 PIDFile=/var/lib/ravend/ravend.pid
 ExecStart=/usr/bin/ravend -daemon -pid=/var/lib/ravend/ravend.pid \
--conf=/etc/raven/raven.conf -datadir=/var/lib/ravend -disablewallet
+-conf=/etc/raven/raven.conf -datadir=/var/lib/ravend
 
 Restart=always
 PrivateTmp=true
