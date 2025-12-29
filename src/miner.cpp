@@ -721,11 +721,16 @@ int GenerateRavens(bool fGenerate, int nThreads, const CChainParams& chainparams
 
     minerThreads = new boost::thread_group();
 
-    const bool use_opencl = OpenCLGpuAvailable();
-    if (use_opencl) {
-        LogPrintf("RavenMiner -- OpenCL GPU detected, using GPU mining\n");
+    bool use_opencl = false;
+    if (gArgs.GetBoolArg("-gpu", true)) {
+        use_opencl = OpenCLGpuAvailable();
+        if (use_opencl) {
+            LogPrintf("RavenMiner -- OpenCL GPU detected, using GPU mining\n");
+        } else {
+            LogPrintf("RavenMiner -- OpenCL GPU not detected, falling back to CPU mining\n");
+        }
     } else {
-        LogPrintf("RavenMiner -- OpenCL GPU not detected, falling back to CPU mining\n");
+        LogPrintf("RavenMiner -- GPU mining disabled via -gpu=0, using CPU mining\n");
     }
     
     //Reset metrics

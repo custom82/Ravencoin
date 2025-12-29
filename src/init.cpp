@@ -451,6 +451,7 @@ std::string HelpMessage(HelpMessageMode mode)
     strUsage += HelpMessageOpt("-disablemessaging", strprintf(_("Turn off the databasing the messages sent with assets (default: %u)"), false));
     if (showDebug)
         strUsage += HelpMessageOpt("-feefilter", strprintf("Tell other nodes to filter invs to us by our mempool min fee (default: %u)", DEFAULT_FEEFILTER));
+    strUsage += HelpMessageOpt("-gpu", _("Enable OpenCL GPU mining when available (default: 1)"));
     strUsage += HelpMessageOpt("-loadblock=<file>", _("Imports blocks from external blk000??.dat file on startup"));
     strUsage += HelpMessageOpt("-maxreorg=<n>", strprintf(_("Set the Maximum reorg depth (default: %u)"), defaultChainParams->MaxReorganizationDepth()));
     strUsage += HelpMessageOpt("-minreorgpeers=<n>", strprintf(_("Set the Minimum amount of peers required to disallow reorg of chains of depth >= maxreorg. Peers must be greater than. (default: %u)"), defaultChainParams->MinReorganizationPeers()));
