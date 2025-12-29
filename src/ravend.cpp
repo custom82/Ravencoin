@@ -23,7 +23,13 @@
 
 #include <boost/thread.hpp>
 
+#include <errno.h>
+#include <fcntl.h>
 #include <stdio.h>
+#include <string.h>
+#include <sys/stat.h>
+#include <sys/types.h>
+#include <unistd.h>
 
 /* Introduction text for doxygen: */
 
@@ -56,6 +62,62 @@ void WaitForShutdown(boost::thread_group* threadGroup)
         threadGroup->join_all();
     }
 }
+
+#ifndef WIN32
+static bool DaemonizeProcess()
+{
+#if HAVE_DECL_DAEMON
+#if defined(MAC_OSX)
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
+#endif
+    if (daemon(1, 0)) { // don't chdir (1), do close FDs (0)
+        fprintf(stderr, "Error: daemon() failed: %s\n", strerror(errno));
+        return false;
+    }
+#if defined(MAC_OSX)
+#pragma GCC diagnostic pop
+#endif
+    return true;
+#else
+    pid_t pid = fork();
+    if (pid < 0) {
+        fprintf(stderr, "Error: fork() failed: %s\n", strerror(errno));
+        return false;
+    }
+    if (pid > 0) {
+        exit(EXIT_SUCCESS);
+    }
+
+    if (setsid() < 0) {
+        fprintf(stderr, "Error: setsid() failed: %s\n", strerror(errno));
+        return false;
+    }
+
+    pid = fork();
+    if (pid < 0) {
+        fprintf(stderr, "Error: fork() failed: %s\n", strerror(errno));
+        return false;
+    }
+    if (pid > 0) {
+        exit(EXIT_SUCCESS);
+    }
+
+    umask(0);
+
+    int fd = open("/dev/null", O_RDWR);
+    if (fd >= 0) {
+        dup2(fd, STDIN_FILENO);
+        dup2(fd, STDOUT_FILENO);
+        dup2(fd, STDERR_FILENO);
+        if (fd > STDERR_FILENO) {
+            close(fd);
+        }
+    }
+    return true;
+#endif
+}
+#endif
 
 //////////////////////////////////////////////////////////////////////////////
 //
@@ -145,28 +207,21 @@ bool AppInit(int argc, char* argv[])
             // InitError will have been called with detailed error, which ends up on console
             exit(EXIT_FAILURE);
         }
+#ifndef WIN32
         if (gArgs.GetBoolArg("-daemon", false))
         {
-#if HAVE_DECL_DAEMON
-#if defined(MAC_OSX)
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
-#endif
             fprintf(stdout, "Raven server starting\n");
-
-            // Daemonize
-            if (daemon(1, 0)) { // don't chdir (1), do close FDs (0)
-                fprintf(stderr, "Error: daemon() failed: %s\n", strerror(errno));
+            if (!DaemonizeProcess()) {
                 return false;
             }
-#if defined(MAC_OSX)
-#pragma GCC diagnostic pop
-#endif
+        }
 #else
+        if (gArgs.GetBoolArg("-daemon", false))
+        {
             fprintf(stderr, "Error: -daemon is not supported on this operating system\n");
             return false;
-#endif // HAVE_DECL_DAEMON
         }
+#endif
         // Lock data directory after daemonization
         if (!AppInitLockDataDirectory())
         {
