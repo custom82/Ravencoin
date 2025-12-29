@@ -554,4 +554,5 @@ install(FILES
 
 if (BUILD_RAVENCOIND)
     install(FILES contrib/init/ravend.service DESTINATION lib/systemd/system)
+    install(FILES contrib/debian/examples/raven.conf DESTINATION etc/raven RENAME raven.conf)
 endif()
