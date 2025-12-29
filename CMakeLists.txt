@@ -213,6 +213,10 @@ file(GLOB CORE_TOP_SRC
     src/rpc/*.cpp
 )
 
+list(APPEND CORE_TOP_SRC
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/opencl_utils.cpp
+)
+
 if (ENABLE_WALLET)
     file(GLOB CORE_WALLET_SRC
         src/wallet/*.cpp
