@@ -22,6 +22,7 @@
 #include "splashscreen.h"
 #include "utilitydialog.h"
 #include "winshutdownmonitor.h"
+#include "rpcclientdialog.h"
 
 #ifdef ENABLE_WALLET
 #include "paymentserver.h"
@@ -761,6 +762,12 @@ int main(int argc, char *argv[])
 
     // Subscribe to global signals from core
     uiInterface.InitMessage.connect(InitMessage);
+
+    if (gArgs.GetBoolArg("-rpcclient", false)) {
+        RPCClientDialog rpcClientDialog;
+        rpcClientDialog.show();
+        return app.exec();
+    }
 
     if (gArgs.GetBoolArg("-splash", DEFAULT_SPLASHSCREEN) && !gArgs.GetBoolArg("-min", false))
         app.createSplashScreen(networkStyle.data());
