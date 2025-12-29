@@ -29,7 +29,7 @@
 #include "timedata.h"
 #include "txmempool.h"
 #include "util.h"
-#include "ui_interface.h"
+#include "clientuiinterface.h"
 #include "utilmoneystr.h"
 #include "wallet/fees.h"
 #include "wallet/bip39.h"

@@ -35,7 +35,7 @@
 
 #include "chainparams.h"
 #include "init.h"
-#include "ui_interface.h"
+#include "clientuiinterface.h"
 #include "util.h"
 #include "core_io.h"
 #include "darkstyle.h"

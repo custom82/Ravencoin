@@ -41,7 +41,7 @@
 #include "txdb.h"
 #include "txmempool.h"
 #include "torcontrol.h"
-#include "ui_interface.h"
+#include "clientuiinterface.h"
 #include "util.h"
 #include "utilmoneystr.h"
 #include "validationinterface.h"

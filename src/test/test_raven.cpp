@@ -17,7 +17,7 @@
 #include "random.h"
 #include "txdb.h"
 #include "txmempool.h"
-#include "ui_interface.h"
+#include "clientuiinterface.h"
 #include "streams.h"
 #include "rpc/server.h"
 #include "rpc/register.h"

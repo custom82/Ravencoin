@@ -27,7 +27,7 @@
 #include "scheduler.h"
 #include "tinyformat.h"
 #include "txmempool.h"
-#include "ui_interface.h"
+#include "clientuiinterface.h"
 #include "util.h"
 #include "utilmoneystr.h"
 #include "utilstrencodings.h"

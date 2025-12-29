@@ -12,7 +12,7 @@
 #include "base58.h"
 #include "chainparams.h"
 #include "policy/policy.h"
-#include "ui_interface.h"
+#include "clientuiinterface.h"
 #include "util.h"
 #include "wallet/wallet.h"
 
