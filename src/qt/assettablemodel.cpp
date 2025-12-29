@@ -186,7 +186,7 @@ QVariant AssetTableModel::data(const QModelIndex &index, int role) const
                 return QVariant();
 
             if (!rec->fIsAdministrator)
-                QVariant();
+                return QVariant();
 
             QPixmap pixmap;
 
@@ -202,6 +202,7 @@ QVariant AssetTableModel::data(const QModelIndex &index, int role) const
                 return QString::fromStdString(rec->name);
             else if (index.column() == Quantity)
                 return QString::fromStdString(rec->formattedQuantity());
+            return QVariant();
         }
         case Qt::ToolTipRole:
             return formatTooltip(rec);
@@ -210,6 +211,7 @@ QVariant AssetTableModel::data(const QModelIndex &index, int role) const
             if (index.column() == Quantity) {
                 return static_cast<int>(Qt::AlignRight | Qt::AlignVCenter);
             }
+            return QVariant();
         }
         default:
             return QVariant();
