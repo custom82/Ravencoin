@@ -762,9 +762,9 @@ void RavenGUI::createToolBars()
 
         // Network request code for the header widget
         QObject::connect(networkManager, &QNetworkAccessManager::finished,
-                         this, [=](QNetworkReply *reply) {
+                         this, [this](QNetworkReply *reply) {
                     if (reply->error()) {
-                        labelCurrentPrice->setText("");
+                        this->labelCurrentPrice->setText("");
                         qDebug() << reply->errorString();
                         return;
                     }
@@ -785,23 +785,23 @@ void RavenGUI::createToolBars()
                     if (!list.isEmpty()) {
                         double next = list.first().toDouble(&ok) * this->currentPriceDisplay->Scalar;
                         if (!ok) {
-                            labelCurrentPrice->setStyleSheet(currentPriceStyleSheet.arg(COLOR_LABELS.name()));
-                            labelCurrentPrice->setText("");
+                            this->labelCurrentPrice->setStyleSheet(currentPriceStyleSheet.arg(COLOR_LABELS.name()));
+                            this->labelCurrentPrice->setText("");
                         } else {
-                            double current = labelCurrentPrice->text().toDouble(&ok);
+                            double current = this->labelCurrentPrice->text().toDouble(&ok);
                             if (!ok) {
                                 current = 0.00000000;
                             } else {
                                 if (next < current && !this->unitChanged)
-                                    labelCurrentPrice->setStyleSheet(currentPriceStyleSheet.arg("red"));
+                                    this->labelCurrentPrice->setStyleSheet(currentPriceStyleSheet.arg("red"));
                                 else if (next > current && !this->unitChanged)
-                                    labelCurrentPrice->setStyleSheet(currentPriceStyleSheet.arg("green"));
+                                    this->labelCurrentPrice->setStyleSheet(currentPriceStyleSheet.arg("green"));
                                 else
-                                    labelCurrentPrice->setStyleSheet(currentPriceStyleSheet.arg(COLOR_LABELS.name()));
+                                    this->labelCurrentPrice->setStyleSheet(currentPriceStyleSheet.arg(COLOR_LABELS.name()));
                             }
                             this->unitChanged = false;
-                            labelCurrentPrice->setText(QString("%1").arg(QString().setNum(next, 'f', this->currentPriceDisplay->Decimals)));
-                            labelCurrentPrice->setToolTip(tr("Brought to you by binance.com"));
+                            this->labelCurrentPrice->setText(QString("%1").arg(QString().setNum(next, 'f', this->currentPriceDisplay->Decimals)));
+                            this->labelCurrentPrice->setToolTip(tr("Brought to you by binance.com"));
                         }
                     }
                 }
@@ -821,7 +821,7 @@ void RavenGUI::createToolBars()
         // Get the latest Ravencoin release and let the user know if they are using the latest version
         // Network request code for the header widget
         QObject::connect(networkVersionManager, &QNetworkAccessManager::finished,
-                         this, [=](QNetworkReply *reply) {
+                         this, [this](QNetworkReply *reply) {
                     if (reply->error()) {
                         qDebug() << reply->errorString();
                         return;
@@ -887,9 +887,9 @@ void RavenGUI::createToolBars()
                            }
 
                            if (fNewSoftwareFound) {
-                               labelVersionUpdate->setToolTip(QString::fromStdString(strprintf("Currently running: %s\nLatest version: %s", FormatFullVersion(),
-                                                                                               latestVersion)));
-                               labelVersionUpdate->show();
+                               this->labelVersionUpdate->setToolTip(QString::fromStdString(strprintf("Currently running: %s\nLatest version: %s", FormatFullVersion(),
+                                                                                                     latestVersion)));
+                               this->labelVersionUpdate->show();
 
                                // Only display the message on startup to the user around 1/2 of the time
                                if (GetRandInt(2) == 1) {
@@ -905,7 +905,7 @@ void RavenGUI::createToolBars()
                                    }
                                }
                            } else {
-                               labelVersionUpdate->hide();
+                               this->labelVersionUpdate->hide();
                            }
                        }
                     }
