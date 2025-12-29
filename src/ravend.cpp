@@ -16,6 +16,7 @@
 #include "init.h"
 #include "noui.h"
 #include "scheduler.h"
+#include "opencl_utils.h"
 #include "util.h"
 #include "httpserver.h"
 #include "httprpc.h"
@@ -27,6 +28,7 @@
 #include <fcntl.h>
 #include <stdio.h>
 #include <string.h>
+#include <vector>
 #include <sys/stat.h>
 #include <sys/types.h>
 #include <unistd.h>
@@ -154,6 +156,18 @@ bool AppInit(int argc, char* argv[])
         }
 
         fprintf(stdout, "%s", strUsage.c_str());
+        return true;
+    }
+
+    if (gArgs.GetBoolArg("-list-opencl-devices", false)) {
+        std::string error;
+        std::vector<std::string> devices = ListOpenCLDevices(&error);
+        if (!error.empty()) {
+            fprintf(stdout, "%s\n", error.c_str());
+        }
+        for (const std::string& entry : devices) {
+            fprintf(stdout, "%s\n", entry.c_str());
+        }
         return true;
     }
 
