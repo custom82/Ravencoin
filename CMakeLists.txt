@@ -113,40 +113,18 @@ set(CMAKE_REQUIRED_INCLUDES ${LIBSPH_INCLUDE_DIRS})
 check_include_file("libsph/sph_tiger.h" LIBSPH_HAS_TIGER_HEADER)
 unset(CMAKE_REQUIRED_INCLUDES)
 
-set(LIBSPH_CANDIDATE_LIBRARIES "")
-foreach(LIBSPH_NAME sph libsph)
-    find_library(LIBSPH_CANDIDATE_LIBRARY
-        NAMES ${LIBSPH_NAME}
-        PATHS ${LIBSPH_LIBRARY_DIRS} /usr/lib64 /usr/lib /usr/local/lib
-    )
-    if (LIBSPH_CANDIDATE_LIBRARY)
-        list(APPEND LIBSPH_CANDIDATE_LIBRARIES "${LIBSPH_CANDIDATE_LIBRARY}")
-    endif()
-endforeach()
-
-set(LIBSPH_LIBRARY "")
 set(LIBSPH_HAS_TIGER_SYMBOL FALSE)
-set(CMAKE_REQUIRED_INCLUDES ${LIBSPH_INCLUDE_DIRS})
 set(CMAKE_REQUIRED_LINK_OPTIONS ${LIBSPH_LDFLAGS})
-foreach(LIBSPH_CANDIDATE_LIBRARY IN LISTS LIBSPH_CANDIDATE_LIBRARIES)
+foreach(LIBSPH_NAME sph libsph)
     unset(LIBSPH_CANDIDATE_HAS_TIGER CACHE)
-    get_filename_component(LIBSPH_CANDIDATE_DIR "${LIBSPH_CANDIDATE_LIBRARY}" DIRECTORY)
-    set(CMAKE_REQUIRED_LIBRARIES "${LIBSPH_CANDIDATE_LIBRARY}")
-    check_library_exists("${LIBSPH_CANDIDATE_LIBRARY}" sph_tiger_init "${LIBSPH_CANDIDATE_DIR}" LIBSPH_CANDIDATE_HAS_TIGER)
+    check_library_exists("${LIBSPH_NAME}" sph_tiger_init "${LIBSPH_LIBRARY_DIRS}" LIBSPH_CANDIDATE_HAS_TIGER)
     if (LIBSPH_CANDIDATE_HAS_TIGER)
-        set(LIBSPH_LIBRARY "${LIBSPH_CANDIDATE_LIBRARY}")
+        set(LIBSPH_LIBRARIES "${LIBSPH_NAME}")
         set(LIBSPH_HAS_TIGER_SYMBOL TRUE)
         break()
     endif()
 endforeach()
-unset(CMAKE_REQUIRED_LIBRARIES)
 unset(CMAKE_REQUIRED_LINK_OPTIONS)
-unset(CMAKE_REQUIRED_INCLUDES)
-
-if (LIBSPH_LIBRARY)
-    get_filename_component(LIBSPH_LIBRARY_DIR "${LIBSPH_LIBRARY}" DIRECTORY)
-    set(LIBSPH_LIBRARIES "${LIBSPH_LIBRARY}")
-endif()
 
 if (NOT LIBSPH_HAS_TIGER_HEADER OR NOT LIBSPH_HAS_TIGER_SYMBOL)
     message(FATAL_ERROR "libsph was found but does not provide sph_tiger_init; rebuild libsph with Tiger enabled or install a version that exports it.")
@@ -325,8 +303,8 @@ if (BUILD_RAVENCOIND)
             ${CMAKE_DL_LIBS}  # Aggiunto
 
     )
-    if (LIBSPH_LIBRARY_DIR)
-        target_link_directories(ravend PRIVATE ${LIBSPH_LIBRARY_DIR})
+    if (LIBSPH_LIBRARY_DIRS)
+        target_link_directories(ravend PRIVATE ${LIBSPH_LIBRARY_DIRS})
     endif()
 
     if (ENABLE_ZMQ)
@@ -360,8 +338,8 @@ if (BUILD_RAVENCOIN_CLI)
             ${MINIUPNPC_LDFLAGS} # Aggiunto
             ${CMAKE_DL_LIBS}  # Aggiunto
 )
-    if (LIBSPH_LIBRARY_DIR)
-        target_link_directories(raven-cli PRIVATE ${LIBSPH_LIBRARY_DIR})
+    if (LIBSPH_LIBRARY_DIRS)
+        target_link_directories(raven-cli PRIVATE ${LIBSPH_LIBRARY_DIRS})
     endif()
 
     if (ENABLE_ZMQ)
@@ -395,8 +373,8 @@ if (BUILD_RAVENCOIN_TX)
             ${MINIUPNPC_LDFLAGS}# Aggiunto
             ${CMAKE_DL_LIBS}  # Aggiunto
             )
-    if (LIBSPH_LIBRARY_DIR)
-        target_link_directories(raven-tx PRIVATE ${LIBSPH_LIBRARY_DIR})
+    if (LIBSPH_LIBRARY_DIRS)
+        target_link_directories(raven-tx PRIVATE ${LIBSPH_LIBRARY_DIRS})
     endif()
 
     if (ENABLE_ZMQ)
@@ -455,8 +433,8 @@ if (BUILD_RAVENCOIN_QT)
             ${MINIUPNPC_LDFLAGS}# Aggiunto
             ${CMAKE_DL_LIBS}  # Aggiunto
             )
-    if (LIBSPH_LIBRARY_DIR)
-        target_link_directories(raven-qt PRIVATE ${LIBSPH_LIBRARY_DIR})
+    if (LIBSPH_LIBRARY_DIRS)
+        target_link_directories(raven-qt PRIVATE ${LIBSPH_LIBRARY_DIRS})
     endif()
 
     if (ENABLE_ZMQ)
