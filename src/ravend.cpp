@@ -16,6 +16,7 @@
 #include "init.h"
 #include "noui.h"
 #include "scheduler.h"
+#include "cuda_utils.h"
 #include "opencl_utils.h"
 #include "util.h"
 #include "httpserver.h"
@@ -162,6 +163,17 @@ bool AppInit(int argc, char* argv[])
     if (gArgs.GetBoolArg("-list-opencl-devices", false)) {
         std::string error;
         std::vector<std::string> devices = ListOpenCLDevices(&error);
+        if (!error.empty()) {
+            fprintf(stdout, "%s\n", error.c_str());
+        }
+        for (const std::string& entry : devices) {
+            fprintf(stdout, "%s\n", entry.c_str());
+        }
+        return true;
+    }
+    if (gArgs.GetBoolArg("-list-cuda-devices", false)) {
+        std::string error;
+        std::vector<std::string> devices = ListCudaDevices(&error);
         if (!error.empty()) {
             fprintf(stdout, "%s\n", error.c_str());
         }

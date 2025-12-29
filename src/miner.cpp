@@ -24,6 +24,7 @@
 #include "script/standard.h"
 #include "timedata.h"
 #include "txmempool.h"
+#include "cuda_utils.h"
 #include "opencl_utils.h"
 #include "util.h"
 #include "utilmoneystr.h"
@@ -36,6 +37,7 @@
 #include <boost/thread.hpp>
 #include <algorithm>
 #include <queue>
+#include <string>
 #include <utility>
 
 
@@ -56,6 +58,38 @@ uint64_t nLastBlockWeight = 0;
 uint64_t nMiningTimeStart = 0;
 uint64_t nHashesPerSec = 0;
 uint64_t nHashesDone = 0;
+
+enum class MiningBackend {
+    kCpu,
+    kOpenCL,
+    kCuda,
+};
+
+const char* MiningBackendLabel(MiningBackend backend)
+{
+    switch (backend) {
+        case MiningBackend::kOpenCL:
+            return "OpenCL";
+        case MiningBackend::kCuda:
+            return "CUDA";
+        case MiningBackend::kCpu:
+            break;
+    }
+    return "CPU";
+}
+
+const char* MiningBackendThreadName(MiningBackend backend)
+{
+    switch (backend) {
+        case MiningBackend::kOpenCL:
+            return "raven-opencl-miner";
+        case MiningBackend::kCuda:
+            return "raven-cuda-miner";
+        case MiningBackend::kCpu:
+            break;
+    }
+    return "raven-miner";
+}
 
 
 int64_t UpdateTime(CBlockHeader* pblock, const Consensus::Params& consensusParams, const CBlockIndex* pindexPrev)
@@ -536,11 +570,15 @@ CWallet *GetFirstWallet() {
     return(NULL);
 }
 
-void static RavenMiner(const CChainParams& chainparams, bool use_opencl)
+void static RavenMiner(const CChainParams& chainparams, MiningBackend backend)
 {
-    LogPrintf("RavenMiner%s -- started\n", use_opencl ? " (OpenCL)" : "");
+    const char* backend_label = MiningBackendLabel(backend);
+    const std::string backend_suffix = (backend == MiningBackend::kCpu)
+        ? ""
+        : strprintf(" (%s)", backend_label);
+    LogPrintf("RavenMiner%s -- started\n", backend_suffix);
     SetThreadPriority(THREAD_PRIORITY_LOWEST);
-    RenameThread(use_opencl ? "raven-opencl-miner" : "raven-miner");
+    RenameThread(MiningBackendThreadName(backend));
 
     unsigned int nExtraNonce = 0;
 
@@ -621,7 +659,7 @@ void static RavenMiner(const CChainParams& chainparams, bool use_opencl)
             IncrementExtraNonce(pblock, pindexPrev, nExtraNonce);
 
             LogPrintf("RavenMiner%s -- Running miner with %u transactions in block (%u bytes)\n",
-                use_opencl ? " (OpenCL)" : "",
+                backend_suffix,
                 pblock->vtx.size(),
                 ::GetSerializeSize(*pblock, SER_NETWORK, PROTOCOL_VERSION));
 
@@ -721,16 +759,49 @@ int GenerateRavens(bool fGenerate, int nThreads, const CChainParams& chainparams
 
     minerThreads = new boost::thread_group();
 
-    bool use_opencl = false;
-    if (gArgs.GetBoolArg("-gpu", true)) {
-        use_opencl = OpenCLGpuAvailable();
-        if (use_opencl) {
-            LogPrintf("RavenMiner -- OpenCL GPU detected, using GPU mining\n");
-        } else {
-            LogPrintf("RavenMiner -- OpenCL GPU not detected, falling back to CPU mining\n");
-        }
-    } else {
+    MiningBackend backend = MiningBackend::kCpu;
+    if (!gArgs.GetBoolArg("-gpu", true)) {
         LogPrintf("RavenMiner -- GPU mining disabled via -gpu=0, using CPU mining\n");
+    } else {
+        std::string backend_arg = gArgs.GetArg("-gpu-backend", "auto");
+        if (backend_arg == "cpu") {
+            backend = MiningBackend::kCpu;
+        } else if (backend_arg == "opencl") {
+            if (OpenCLGpuAvailable()) {
+                backend = MiningBackend::kOpenCL;
+                LogPrintf("RavenMiner -- OpenCL GPU detected, using OpenCL mining\n");
+            } else {
+                LogPrintf("RavenMiner -- OpenCL GPU not detected, falling back to CPU mining\n");
+            }
+        } else if (backend_arg == "cuda") {
+            if (CudaGpuAvailable()) {
+                backend = MiningBackend::kCuda;
+                LogPrintf("RavenMiner -- CUDA GPU detected, using CUDA mining\n");
+            } else {
+                LogPrintf("RavenMiner -- CUDA GPU not detected, falling back to CPU mining\n");
+            }
+        } else if (backend_arg == "auto") {
+            if (OpenCLGpuAvailable()) {
+                backend = MiningBackend::kOpenCL;
+                LogPrintf("RavenMiner -- OpenCL GPU detected, using OpenCL mining\n");
+            } else if (CudaGpuAvailable()) {
+                backend = MiningBackend::kCuda;
+                LogPrintf("RavenMiner -- CUDA GPU detected, using CUDA mining\n");
+            } else {
+                LogPrintf("RavenMiner -- No GPU backends detected, using CPU mining\n");
+            }
+        } else {
+            LogPrintf("RavenMiner -- Unknown -gpu-backend value '%s', falling back to auto\n", backend_arg.c_str());
+            if (OpenCLGpuAvailable()) {
+                backend = MiningBackend::kOpenCL;
+                LogPrintf("RavenMiner -- OpenCL GPU detected, using OpenCL mining\n");
+            } else if (CudaGpuAvailable()) {
+                backend = MiningBackend::kCuda;
+                LogPrintf("RavenMiner -- CUDA GPU detected, using CUDA mining\n");
+            } else {
+                LogPrintf("RavenMiner -- No GPU backends detected, using CPU mining\n");
+            }
+        }
     }
     
     //Reset metrics
@@ -739,7 +810,7 @@ int GenerateRavens(bool fGenerate, int nThreads, const CChainParams& chainparams
     nHashesPerSec = 0;
 
     for (int i = 0; i < nThreads; i++){
-        minerThreads->create_thread(boost::bind(&RavenMiner, boost::cref(chainparams), use_opencl));
+        minerThreads->create_thread(boost::bind(&RavenMiner, boost::cref(chainparams), backend));
     }
 
     return(numCores);
