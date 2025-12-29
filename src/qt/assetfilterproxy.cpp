@@ -31,12 +31,14 @@ bool AssetFilterProxy::filterAcceptsRow(int sourceRow, const QModelIndex &source
 
 void AssetFilterProxy::setAssetNamePrefix(const QString &_assetNamePrefix)
 {
+    beginFilterChange();
     this->assetNamePrefix = _assetNamePrefix;
-    invalidateFilter();
+    endFilterChange();
 }
 
 void AssetFilterProxy::setAssetNameContains(const QString &_assetNameContains)
 {
+    beginFilterChange();
     this->assetNameContains = _assetNameContains;
-    invalidateFilter();
+    endFilterChange();
 }
