@@ -29,7 +29,7 @@ public:
 
     template <typename Stream, typename Operation>
     inline void SerializationOp(Stream& s, Operation ser_action) {
-        qint64 nDate = date.toSecsSinceEpoch();
+        int64_t nDate = date.toSecsSinceEpoch();
 
         READWRITE(this->nVersion);
         READWRITE(id);
